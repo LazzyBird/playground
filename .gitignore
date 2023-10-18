@@ -42,6 +42,9 @@ build/Release
 node_modules/
 jspm_packages/
 
+# test examples
+test-examples/
+
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
@@ -128,3 +131,6 @@ dist
 .yarn/build-state.yml
 .yarn/install-state.gz
 .pnp.*
+/test-results/
+/playwright-report/
+/playwright/.cache/
