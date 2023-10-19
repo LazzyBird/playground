@@ -13,10 +13,12 @@
   "author": "i",
   "license": "ISC",
   "dependencies": {
+    "jest": "^29.7.0",
     "playwright": "^1.39.0"
   },
   "devDependencies": {
     "@playwright/test": "^1.39.0",
+    "@testing-library/jest-dom": "^6.1.4",
     "@types/node": "^20.8.7"
   }
 }
