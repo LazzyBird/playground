@@ -15,30 +15,30 @@ test.beforeEach("Open URL", async ({ page }) => {
   await page.goto(`${taskURL}`, { timeout: 30000 });
 });
 
-test("there are 5 items in the menu", async ({ page }) => {
+test("there are all text items", async ({ page }) => {
   await expect(page.getByRole("listitem")).toHaveCount(5);
 });
 
-test("there are all text items", async ({ page }) => {
-  await expect(page.getByRole("list")).toContainText(`${menuItems}`);
+test("the menu is in viewport", async ({ page }) => {
+  await expect(page.locator(`#content > div > ul`)).toBeInViewport();
 });
 
 test("Home menu item is present", async ({ page }) => {
-  await expect(page.getByRole("listitem").nth(1)).toHaveText(`${menuItems[0]}`);
+  await expect(page.getByRole("listitem").nth(0)).toHaveText(`${menuItems[0]}`);
 });
 
 test("About menu item is present", async ({ page }) => {
-  await expect(page.getByRole("listitem").nth(2)).toHaveText(`${menuItems[1]}`);
+  await expect(page.getByRole("listitem").nth(1)).toHaveText(`${menuItems[1]}`);
 });
 
 test("Contact menu item is present", async ({ page }) => {
-  await expect(page.getByRole("listitem").nth(3)).toHaveText(`${menuItems[2]}`);
+  await expect(page.getByRole("listitem").nth(2)).toHaveText(`${menuItems[2]}`);
 });
 
 test("Portfolio menu item is present", async ({ page }) => {
-  await expect(page.getByRole("listitem").nth(4)).toHaveText(`${menuItems[3]}`);
+  await expect(page.getByRole("listitem").nth(3)).toHaveText(`${menuItems[3]}`);
 });
 
 test("Gallery menu item is present", async ({ page }) => {
-  await expect(page.getByRole("listitem").nth(5)).toHaveText(`${menuItems[4]}`);
+  await expect(page.getByRole("listitem").nth(4)).toHaveText(`${menuItems[4]}`);
 });
