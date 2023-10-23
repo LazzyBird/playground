@@ -17,5 +17,14 @@ test.beforeEach(async ({ page }) => {
 });
 
 test('page have add element button', async({ page }) => {
-  await expect(page.locator('#content > div > button')).toBeVisible();
+  await expect(page.getByText('Add Element')).toBeVisible();
+});
+test('element was created after clicking the button', async({ page }) => {
+  await page.getByText('Add Element').click();
+  await expect(page.getByText('Delete')).toBeVisible();
+});
+test('element was deleted after clicking the button', async({ page }) => {
+  await page.getByText('Add Element').click();
+  await page.getByText('Delete').click();
+  await expect(page.getByText('Delete')).not.toBeInViewport();
 });
