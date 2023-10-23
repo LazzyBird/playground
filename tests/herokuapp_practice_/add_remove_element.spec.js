@@ -15,3 +15,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto(taskURL);
   await page.waitForLoadState('load');
 });
+
+test('page have add element button', async({ page }) => {
+  await expect(page.locator('#content > div > button')).toBeVisible();
+});
