@@ -18,46 +18,21 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("Home menu item is according to layout ", async ({ page }) => {
-  /*await page
-    .getByText("Home")
-    .screenshot({ path: "screenshots/home.png" });*/
-  await expect(page.getByText("Home")).toHaveScreenshot(
-    "screenshots/home.png"
-  );
+  await expect(page.getByText("Home")).toHaveScreenshot();
 });
 
 test("About menu item is according to layout ", async ({ page }) => {
-  /* await page
-    .getByText("About")
-    .screenshot({ path: "screenshots/about.png" });*/
-  await expect(page.getByText('About')).toHaveScreenshot(
-    "screenshots/about.png"
-  );
+  await expect(page.getByText("About")).toHaveScreenshot();
 });
 
 test("Contact Us menu item is according to layout ", async ({ page }) => {
- /*  await page
-    .getByText("Contact Us")
-    .screenshot({ path: "screenshots/contact.png" });*/
-  await expect(page.getByText('Contact Us')).toHaveScreenshot(
-    "screenshots/contact.png"
-  );
+  await expect(page.getByText("Contact Us")).toHaveScreenshot();
 });
 
 test("Portfolio menu item is according to layout ", async ({ page }) => {
-   /*await page
-    .getByText("Portfolio")
-    .screenshot({ path: "screenshots/portfolio.png" }); */
-  await expect(page.getByText('Portfolio')).toHaveScreenshot(
-    "screenshots/portfolio.png"
-  );
+  await expect(page.getByText("Portfolio")).toHaveScreenshot();
 });
 
 test("Gallery menu item is according to layout ", async ({ page }) => {
-  /*await page
-    .getByText("Gallery")
-    .screenshot({ path: "screenshots/gallery.png" });*/
-  await expect(page.getByText("Gallery")).toHaveScreenshot({
-    path: "screenshots/gallery.png"
-  });
+  await expect(page.getByText("Gallery")).toHaveScreenshot({});
 });
