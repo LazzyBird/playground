@@ -44,6 +44,9 @@ jspm_packages/
 
 # test examples
 test-examples/
+test-results/
+playwright-report/
+screenshots/
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
