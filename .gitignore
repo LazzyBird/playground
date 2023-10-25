@@ -47,6 +47,8 @@ test-examples/
 test-results/
 playwright-report/
 screenshots/
+shiftingMenuElement.spec.js-snapshots/
+*.png
 
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
