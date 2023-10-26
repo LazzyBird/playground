@@ -17,22 +17,11 @@ test.beforeEach(async ({ page }) => {
   await page.waitForLoadState("load");
 });
 
-test("Home menu item is according to layout ", async ({ page }) => {
+test("Every menu item is according to layout ", async ({ page }) => {
   await expect(page.getByText("Home")).toHaveScreenshot();
-});
-
-test("About menu item is according to layout ", async ({ page }) => {
   await expect(page.getByText("About")).toHaveScreenshot();
-});
-
-test("Contact Us menu item is according to layout ", async ({ page }) => {
   await expect(page.getByText("Contact Us")).toHaveScreenshot();
-});
-
-test.only("Portfolio menu item is according to layout ", async ({ page }) => {
   await expect(page.getByText("Portfolio")).toHaveScreenshot();
-});
-
-test("Gallery menu item is according to layout ", async ({ page }) => {
   await expect(page.getByText("Gallery")).toHaveScreenshot();
 });
+
