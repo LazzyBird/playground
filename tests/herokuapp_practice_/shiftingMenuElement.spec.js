@@ -26,11 +26,12 @@ test("About menu item is according to layout ", async ({ page }) => {
   await expect(page.getByText("About")).toHaveScreenshot();
 });
 
-test.only("Contact Us menu item is according to layout ", async ({ page }) => {
+test("Contact Us menu item is according to layout ", async ({ page }) => {
   await expect(page.getByText("Contact Us")).toHaveScreenshot();
 });
 
-test("Portfolio menu item is according to layout ", async ({ page }) => {
+test.only("Portfolio menu item is according to layout ", async ({ page }) => {
+  await expect(page.getByText("Portfolio")).toBeInViewport();
   await expect(page.getByText("Portfolio")).toHaveScreenshot();
 });
 

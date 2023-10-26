@@ -17,3 +17,8 @@ test.beforeEach(async ({ page }) => {
   await page.goto(taskURL);
   await page.waitForLoadState("load");
 });
+
+test('Image has proper position', async ({ page }) => {
+    await expect(page.locator("img.shift")).toBeAttached();
+await expect(page.locator("img.shift")).toHaveScreenshot();
+})

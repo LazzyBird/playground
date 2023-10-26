@@ -18,19 +18,7 @@ test.beforeEach(async ({ page }) => {
   await page.waitForLoadState("load");
 });
 
-test("Home menu item is according to layout ", async ({ page }) => {
-  await expect(page.getByText("Home")).toHaveScreenshot();
-});
-
-test("About menu item is according to layout ", async ({ page }) => {
-  await expect(page.getByText("About")).toHaveScreenshot();
-});
-
-test.only("Contact Us menu item is according to layout ", async ({ page }) => {
-  await expect(page.getByText("Contact Us")).toHaveScreenshot();
-});
-
-test("Portfolio menu item is according to layout ", async ({ page }) => {
+test.only("Portfolio menu item is according to layout ", async ({ page }) => {
   await expect(page.getByText("Portfolio")).toHaveScreenshot();
 });
 
