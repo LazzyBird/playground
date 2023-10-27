@@ -6,18 +6,16 @@ let page;
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage();
+  await page.goto(taskURL);
+  await page.waitForLoadState("load");
 });
 
 test.afterAll(async () => {
   await page.close();
 });
 
-test.beforeEach(async ({ page }) => {
-  await page.goto(taskURL);
-  await page.waitForLoadState("load");
-});
-
 test("Every menu item is according to layout ", async ({ page }) => {
+  await page.waitForSelector("#content > div > ul");
   await expect(page.getByText("Home")).toHaveScreenshot();
   await expect(page.getByText("About")).toHaveScreenshot();
   await expect(page.getByText("Contact Us")).toHaveScreenshot();

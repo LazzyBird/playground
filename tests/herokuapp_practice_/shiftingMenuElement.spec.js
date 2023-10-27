@@ -6,15 +6,12 @@ let page;
 
 test.beforeAll(async ({ browser }) => {
   page = await browser.newPage();
+  await page.goto(taskURL);
+  await page.waitForLoadState("load");
 });
 
 test.afterAll(async () => {
   await page.close();
-});
-
-test.beforeEach(async ({ page }) => {
-  await page.goto(taskURL);
-  await page.waitForLoadState("load");
 });
 
 test("Home menu item is according to layout ", async ({ page }) => {
