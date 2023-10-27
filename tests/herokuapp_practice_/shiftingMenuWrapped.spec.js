@@ -4,14 +4,8 @@ const taskURL =
   "https://the-internet.herokuapp.com/shifting_content/menu?mode=random&pixel_shift=200";
 let page;
 
-test.beforeAll(async ({ browser }) => {
-  page = await browser.newPage();
+test.beforeEach(async ({ page }) => {
   await page.goto(taskURL);
-  await page.waitForLoadState("load");
-});
-
-test.afterAll(async () => {
-  await page.close();
 });
 
 test("Every menu item is according to layout ", async ({ page }) => {
