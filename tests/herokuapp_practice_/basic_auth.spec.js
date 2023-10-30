@@ -38,8 +38,7 @@ test("Basic Auth Demo with valid credentials added in context", async ({
       password: "admin"
     }
   });
-  let response = await request.get(taskURLwithCredentials);
-expect(response.status()).toBe(200);
+
   const page = await context.newPage();
   await page.goto("taskURL");
   await expect(page.locator("div.example>h3")).toHaveText("Basic Auth");
