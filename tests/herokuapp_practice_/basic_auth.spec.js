@@ -19,16 +19,7 @@ test("Valid credentials added in http credentials", async ({
     "Congratulations! You must have the proper credentials."
   );
 });
-/*
-test("Dismiss dialog leads to 401", async ({ page }) => {
-    await page.goto(taskURL);
-  page.on("dialog", async (dialog) => {
-    if (dialog.type() === "prompt") {
-      await dialog.dismiss();
-    }
-  });
-  await expect(page.response().status().toBe(401));
-}); */
+
 test("Basic Auth Demo with valid credentials added in context", async ({
   browser
 }) => {
@@ -43,3 +34,17 @@ test("Basic Auth Demo with valid credentials added in context", async ({
   await page.goto("taskURL");
   await expect(page.locator("div.example>h3")).toHaveText("Basic Auth");
 });
+
+test("Clicking sign in without credentials leads to 401", async ({ page, request }) => {
+    await page.goto(taskURL);
+    let response = await page.request.get(taskURL);
+  page.on("dialog", dialog  => dialog.accept());
+    expect(response.status()).toBe(401);
+  });
+
+  test("Clicking cancel leads to 401", async ({ page, request }) => {
+    await page.goto(taskURL);
+    let response = await page.request.get(taskURL);
+  page.on("dialog", dialog  => dialog.dismiss());
+    expect(response.status()).toBe(401);
+  });
