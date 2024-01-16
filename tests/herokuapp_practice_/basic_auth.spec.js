@@ -48,3 +48,14 @@ test("Clicking sign in without credentials leads to 401", async ({ page, request
   page.on("dialog", dialog  => dialog.dismiss());
     expect(response.status()).toBe(401);
   });
+
+  test('entering credintials  in prompt field and clicking ok leads to 200', async ({ page }) => {
+    await page.goto(taskURL);
+    page.on("dialog", async (dialog) => {
+      await dialog.accept("admin", "admin");
+    });
+    let response = await page.request.get(taskURL);
+    expect(response.status()).toBe(200);
+  });
+
+  
