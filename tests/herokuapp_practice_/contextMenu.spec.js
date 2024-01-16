@@ -13,3 +13,13 @@ test.afterAll(async () => {
 test.beforeEach("Open URL", async ({ page }) => {
   await page.goto(`${taskURL}`, { timeout: 30000 });
 });
+
+test(" Right-click on the div id=hot-spot calls alert dialog", async({page}) => {
+    page.once("dialog", (dialog) => {
+      console.log(`Dialog message: ${dialog.message()}`);
+      dialog.dismiss().catch(() => {});
+    });
+    await page.locator("#hot-spot").click({
+      button: "right"
+    });
+})
