@@ -139,5 +139,5 @@
   };
   console.log(contact.fullName);
   contact.age = -20;
-  console.log(contact.age);// set contains validation so it will not allow to set negative age
+  console.log(contact.age);// set contains validation so it will not allow to set negative age - and -> 36
 }
