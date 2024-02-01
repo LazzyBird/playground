@@ -166,7 +166,9 @@ images2.forEach((image) => {
     this.artist = artist;
     this.date = date;
   };
-
+  Image.prototype.show = function () {
+    console.log(`${this.title}, ${this.artist}, ${this.date}`);
+  };
   let images = {
     list: [],
 
@@ -191,7 +193,7 @@ images2.forEach((image) => {
           break;
         }
       }
-    }
+    },
 
     add(title, artist, date) {
       // Add a new image to the list if it doesn't already exist
@@ -201,20 +203,62 @@ images2.forEach((image) => {
       }
     },
 
-    show() {
-      // Display all images from the list
-      if (this.list.length === 0) {
-        console.log("The list is empty");
+    show(title) {
+      if (!title) {
+        // Display all images from the list
+        if (this.list.length === 0) {
+          console.log("The list is empty");
+        } else {
+          for (var image of this.list) {
+            image.show();
+          }
+        }
       } else {
-        for (var image of this.list) {
-          console.log(`${image.title}, ${image.artist}, ${image.date}`);
+        let foundImage = this.list.find((image) => image.title === title);
+        if (foundImage) {
+          foundImage.show();
+        } else {
+          console.log("The image is not found in the list");
         }
       }
     },
-
+    delete(title) {
+      // Delete an image from the list
+      for (var image of this.list) {
+        if (image.title === title) {
+          this.list.splice(this.list.indexOf(image), 1);
+          break;
+        }
+      }
+    },
     clear() {
       // Clear all items from the list
       this.list = [];
     }
   };
+  images.add("Mona Lisa", "Leonardo da Vinci", 1503);
+  images.add("The Last Supper", "Leonardo da Vinci", 1495);
+  images.add("The Starry Night", "Vincent van Gogh", 1889);
+  images.edit("Mona Lisa", "Leonardo da Vinci", 1504);
+  images.delete("The Last Supper");
+  images.show();
+  images.show("The Last Supper");
+  images.show("Mona Lisa");
+}
+
+/// Code challenge #5
+// write the deepComp function
+{
+  let a = { x: [1, 2, 3, 4, 5], y: 0, z: { m: "test", n: false } };
+  let b = { x: [1, 2, 3, 4, 5], y: 0, z: { m: "test", n: false } };
+  let c = { x: [1, 2, 3, 4, 5, 6], y: 0, z: { m: "test", n: false } };
+  let d = { x: [1, 2, 3, 4], y: 0, z: { m: "test", n: false } };
+  let e = { x: [1, 2, 3, 4, 5], y: 0, z: { m: "test", n: true } };
+  let f = { x: [1, 2, 3, 4, 5], y: -1, z: { m: "test", n: false } };
+  
+  console.log(deepComp(a, b)); // -> true
+  console.log(deepComp(a, c)); // -> false
+  console.log(deepComp(a, d)); // -> false
+  console.log(deepComp(a, e)); // -> false
+  console.log(deepComp(a, f)); // -> false
 }
