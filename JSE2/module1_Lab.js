@@ -97,38 +97,11 @@ images.forEach((image) =>
 ); // create same but using getImage function as factory?
 //display content of images2:
 images2.forEach((image) => {
-  console.log(`${image.title} (${image.artist}, ${image.date})`);
+  console.log(`${image.title},${image.artist}, ${image.date}`);
 });
 
 /// Code challenge #3
 {
-    let Image = function (title, artist, date) {
-      this.title = title;
-      this.artist = artist;
-      this.date = date;
-    };
-  let images = {
-    list: {
-      title: "string",
-      artist: "string",
-      date: "Number",
-      contains(title) {
-        return title ? true : false;
-          },
-      add(title, artist, date) {
-          let obj = new Image(title, artist, date);
-          return obj;
-          },
-          show() {
-          // show all images froom the list
-          },
-          clear() {
-              // delete all added items
-          }
-    }
-  };
-}
-{// compare and comprehedt this openai corrected solution
   let Image = function (title, artist, date) {
     this.title = title;
     this.artist = artist;
@@ -140,7 +113,15 @@ images2.forEach((image) => {
 
     contains(title) {
       // Check if an image with the given title is in the list
-      return this.list.some((image) => image.title === title);
+      let retVal = false;
+      for (var image of this.list) {
+        if (image.title === title) {
+          retVal = true;
+          console.log(retVal);
+          break;
+        }
+      }
+      return retVal;
     },
 
     add(title, artist, date) {
@@ -153,8 +134,12 @@ images2.forEach((image) => {
 
     show() {
       // Display all images from the list
-      for (image of this.list) {
-        console.log(image);
+      if (this.list.length === 0) {
+        console.log("The list is empty");
+      } else {
+        for (var image of this.list) {
+          console.log(`${image.title}, ${image.artist}, ${image.date}`);
+        }
       }
     },
 
@@ -165,8 +150,71 @@ images2.forEach((image) => {
   };
 
   // Example usage:
-  images.add("Sunset", "John Doe", "2022-01-01");
-  images.add("Mountains", "Jane Smith", "2022-02-15");
-  images.show(); // Display all images
-  images.clear(); // Clear the list
+  images.add("Mona Lisa", "Leonardo da Vinci", 1503);
+  images.add("The Last Supper", "Leonardo da Vinci", 1495);
+  images.add("The Starry Night", "Vincent van Gogh", 1889);
+  images.add("Mona Lisa", "Leonardo da Vinci", 1503);
+  console.log(images.contains("Mona Lisa"));
+  images.show();
+  images.clear();
+  images.show();
+}
+// Code Challenge #4
+{
+  let Image = function (title, artist, date) {
+    this.title = title;
+    this.artist = artist;
+    this.date = date;
+  };
+
+  let images = {
+    list: [],
+
+    contains(title) {
+      // Check if an image with the given title is in the list
+      let retVal = false;
+      for (var image of this.list) {
+        if (image.title === title) {
+          retVal = true;
+          console.log(retVal);
+          break;
+        }
+      }
+      return retVal;
+    },
+    edit(title, artist, date) {
+      // Edit an image in the list
+      for (var image of this.list) {
+        if (image.title === title) {
+          image.artist = artist;
+          image.date = date;
+          break;
+        }
+      }
+    }
+
+    add(title, artist, date) {
+      // Add a new image to the list if it doesn't already exist
+      if (!this.contains(title)) {
+        let obj = new Image(title, artist, date);
+        this.list.push(obj);
+      }
+    },
+
+    show() {
+      // Display all images from the list
+      if (this.list.length === 0) {
+        console.log("The list is empty");
+      } else {
+        for (var image of this.list) {
+          console.log(`${image.title}, ${image.artist}, ${image.date}`);
+        }
+      }
+    },
+
+    clear() {
+      // Clear all items from the list
+      this.list = [];
+    }
+  };
 }
