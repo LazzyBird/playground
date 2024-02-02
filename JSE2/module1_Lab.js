@@ -249,13 +249,40 @@ images2.forEach((image) => {
 /// Code challenge #5
 // write the deepComp function
 {
+  // compare 2 objects with any number of properties and nesting
+  let deepComp = function (a, b) {
+    let equal = Object.keys(a).length === Object.keys(b).length;
+    // check if number of keys is equal in both objects
+    if (equal) {
+      // execution jumps here if number of keys is equal in both objects
+      for (let property in a) {
+        if (typeof a[property] === typeof b[property]) {
+          //compare types of properties - here is part of code that checks if both properties has same type, no matter if hey contain some nested objects, if true - we go ahead with recursion
+          equal =
+            typeof a[property] === "object"
+              ? deepComp(a[property], b[property])
+              : a[property] === b[property];
+          // here with ternary operator we define to get into recursion if property is an object and if not we compare values
+        } else {
+          // execution jumps here if types of properties are not equal
+          equal = false;
+        }
+        if (!equal) {
+          // execution jumps here if number of keys in both objects are not equal, so there's no need to process with comparing nested objects - we return false. - we move here from declaring EQUAL in the beginning
+          break;
+        }
+      }
+    }
+    return equal;
+  };
+
   let a = { x: [1, 2, 3, 4, 5], y: 0, z: { m: "test", n: false } };
   let b = { x: [1, 2, 3, 4, 5], y: 0, z: { m: "test", n: false } };
   let c = { x: [1, 2, 3, 4, 5, 6], y: 0, z: { m: "test", n: false } };
   let d = { x: [1, 2, 3, 4], y: 0, z: { m: "test", n: false } };
   let e = { x: [1, 2, 3, 4, 5], y: 0, z: { m: "test", n: true } };
   let f = { x: [1, 2, 3, 4, 5], y: -1, z: { m: "test", n: false } };
-  
+
   console.log(deepComp(a, b)); // -> true
   console.log(deepComp(a, c)); // -> false
   console.log(deepComp(a, d)); // -> false
