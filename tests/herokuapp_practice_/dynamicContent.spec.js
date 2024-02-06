@@ -1,6 +1,6 @@
-/*
 import { test, expect } from "@playwright/test";
 const taskURL = "https://the-internet.herokuapp.com/dynamic_content?";
+let page;
 
 test.beforeAll("get the page object", async ({ browser }) => {
   page = await browser.newPage();
@@ -14,32 +14,27 @@ test.beforeEach("Open URL", async ({ page }) => {
   await page.goto(`${taskURL}`, { timeout: 30000 });
 });
 
-/html/body/div[2]/div/div/div/div/div[`${this.index}`]/div[2]/text()
- /html/body/div[2]/div/div/div/div/div[`${this.index}`]/div[1]/img
-*/
-{// PW record with assertions
-  const { chromium } = require("playwright");
+test(`avatars are visible`, async ({ page }) => {
+  for (let i = 1; i <= 3; i++) {
+    await expect(page.getByRole("img").nth(i)).toBeVisible();
+  }
+});
+test(`descriptions are visible`, async ({ page }) => {
+  for (let n = 1; n <= 3; n++) {
+    await expect(
+      page.locator(`#content > div:nth-child(${n}) > div.large-10.columns
+`)
+    ).toBeVisible();
+  }
+});
+/*
 
-  (async () => {
-    const browser = await chromium.launch({
-      headless: false
-    });
-    const context = await browser.newContext();
-    const page = await context.newPage();
-    await page.goto("https://the-internet.herokuapp.com/dynamic_content?");
-    await page.getByRole("img").nth(1)
-    await page.getByRole("inlineTextbox").nth(1)
-    });
-  await expect(page.getByRole('img').nth(1)).toBeVisible();
-  await expect(page.getByRole('inlineTextbox').nth(1)).toBeVisible();
-    await context.close();
-    await browser.close();
-  ;
-}
-
-
+//*[@id="content"]/div[1]/div[2]
+#content > div:nth-child(1) > div.large-10.columns
+#content > div:nth-child(${i}) > div.large-10.columns
+// wrong solution with classes 
 const { test, expect } = require("@playwright/test");
-
+let taskURL = "https://the-internet.herokuapp.com/dynamic_content?";
 class Record {
   constructor(page, index) {
     this.page = page;
@@ -85,7 +80,7 @@ test.describe("Record Tests", () => {
 
   test.beforeEach(async () => {
     // Navigate to your base URL or perform any setup needed before each test
-    await page.goto("your_base_url_here");
+    await page.goto(`${taskURL}`, { timeout: 30000 });
   });
 
   test("Test Records Visibility", async () => {
@@ -97,3 +92,4 @@ test.describe("Record Tests", () => {
     }
   });
 });
+*/
