@@ -1,34 +1,34 @@
 import { test, expect } from "@playwright/test";
 const taskURL = "https://the-internet.herokuapp.com/dynamic_content?";
 let page;
-
 test.beforeAll("get the page object", async ({ browser }) => {
-  page = await browser.newPage();
+ page = await browser.newPage();
+  await page.goto(`${taskURL}`, { timeout: 30000 });
 });
 
 test.afterAll(async () => {
   await page.close();
 });
-
+/*
 test.beforeEach("Open URL", async ({ page }) => {
   await page.goto(`${taskURL}`, { timeout: 30000 });
 });
-
+*/
 test(`avatars are visible`, async ({ page }) => {
   for (let i = 1; i <= 3; i++) {
     await expect(page.getByRole("img").nth(i)).toBeVisible();
   }
 });
 test(`descriptions are visible`, async ({ page }) => {
-  for (let n = 1; n <= 3; n++) {
-    await expect(
-      page.locator(`#content > div:nth-child(${n}) > div.large-10.columns
-`)
-    ).toBeVisible();
-  }
-});
+  let description = page.evaluate(
+    page.querySelectorAll("div.large-10.columns")
+  );
+for (let i = 1; i <= 3; i++) {
+  expect (description[i].textContent.length > 0)
+}})
 /*
-
+let vartext = document.querySelectorAll("div.large-10.columns")
+console.log(vartext[3].textContent)
 //*[@id="content"]/div[1]/div[2]
 #content > div:nth-child(1) > div.large-10.columns
 #content > div:nth-child(${i}) > div.large-10.columns
