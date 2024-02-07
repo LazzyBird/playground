@@ -2,7 +2,7 @@ import { test, expect } from "@playwright/test";
 const taskURL = "https://the-internet.herokuapp.com/dynamic_content?";
 let page;
 test.beforeAll("get the page object", async ({ browser }) => {
- page = await browser.newPage();
+  page = await browser.newPage();
   await page.goto(`${taskURL}`, { timeout: 30000 });
 });
 
@@ -21,11 +21,12 @@ test(`avatars are visible`, async ({ page }) => {
 });
 test(`descriptions are visible`, async ({ page }) => {
   let description = page.evaluate(
-    page.querySelectorAll("div.large-10.columns")
+    "document.querySelectorAll('div.large-10.columns')"
   );
-for (let i = 1; i <= 3; i++) {
-  expect (description[i].textContent.length > 0)
-}})
+  for (let i = 1; i <= 3; i++) {
+    expect(description[i].textContent.length > 0);
+  }
+});
 /*
 let vartext = document.querySelectorAll("div.large-10.columns")
 console.log(vartext[3].textContent)
