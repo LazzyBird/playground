@@ -1,6 +1,12 @@
 import { test, expect } from "@playwright/test";
 const taskURL = "https://the-internet.herokuapp.com/dynamic_content?";
 let page;
+async function getDescriptions(page) {
+  // Use page.$$ to query for elements and get a NodeList
+  const descriptions = await page.$$("div.large-10.columns");
+  descriptions.shift(); //removing parent div
+  return descriptions;
+};
 
 test.beforeAll("get the page object", async ({ browser }) => {
   page = await browser.newPage();
@@ -21,16 +27,23 @@ test(`avatars are visible`, async ({ page }) => {
   }
 });
 // ALL ABOVE IS WORKING DO NOT TOUCH!!!!!!!
-/* CODE FOR BROWSER CONSOLE
- let vartext = document.querySelectorAll("div.large-10.columns")
-for(let i = 1; i<=3; i++){
-console.log(vartext[i].textContent.length)};
-*/
 test(`descriptions are visible`, async ({ page }) => {
-  // Use page.$$ to query for elements and get a NodeList
-  const descriptions = await page.$$("div.large-10.columns");
-  // Convert the NodeList to an array using Array.from()
-  const descriptionsArray = Array.from(descriptions);
+  const descriptions = await getDescriptions(page);
+  // Check the visibility of each element
+  const visibilityArray = await Promise.all(
+    descriptions.map(async (element) => {
+      const isVisible = await element.isVisible();
+      return isVisible;
+    })
+  );
+  visibilityArray.forEach((isVisible, index) => {
+    expect(isVisible).toBe(true, `Element at index ${index} is not visible`);
+  });
+});
+
+test(`descriptions are strings`, async ({ page }) => {
+    // Convert the NodeList to an array using Array.from()
+  const descriptionsArray = Array.from(getDescriptions(page));
   // Use Promise.all to wait for all promises to be fulfilled
   const lengthsArrayPromises = descriptionsArray.map(async (desc) => {
     const length = await desc.textContent();
@@ -50,4 +63,5 @@ test(`descriptions are visible`, async ({ page }) => {
       `Item at index ${index} has length 0 or less`
     );
   });
-});
+  }
+  );
