@@ -5,7 +5,6 @@ let page;
 const tableHeadersExpected = [
   ["Lorem", "Ipsum", "Dolor", "Sit", "Amet", "Diceret", "Action"]
 ];
-const buttonColors = ["blue", "red", "green"];
 //
 
 test.beforeAll("get the page object", async ({ browser }) => {
@@ -41,15 +40,16 @@ test.describe("Table tests", () => {
 
 test.describe("Button tests", () => {
   test("Check if the buttons are visible", async ({ page }) => {
-    await expect(page.getByRole("button", { color: "blue" })).toBeVisible();
-    await expect(page.getByRole("button", { color: "red" })).toBeVisible();
-    await expect(page.getByRole("button", { color: "green" })).toBeVisible();
+    for (let i; (i = 0); i++) {
+      await expect(page.locator("#button").nth(i)).toBeVisible();
+    }
   });
-  test("Clicking on button changes #canvas", async ({ page }) => { 
+  test("Clicking on button changes #canvas", async ({ page }) => {
     let zeroScreen = await page.locator("#canvas").screenshot();
-    for (let i = 0; i < buttonColors.length; i++) {
-      await page.getByRole("button", { color: buttonColors[i] }).click();
+    for (let i = 0; i < 3; i++) {
+      await page.locator("#button").nth(i).click();
+      //
       await expect(page.locator("#canvas")).not.toHaveScreenshot(zeroScreen);
     }
-  })
- })
+  });
+});
