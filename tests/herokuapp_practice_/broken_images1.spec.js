@@ -1,4 +1,4 @@
-const { test, expect } = require('@playwright/test');
+const { test, expect } = require("@playwright/test");
 
 const taskURL = "https://the-internet.herokuapp.com/broken_images";
 let page;
@@ -13,12 +13,12 @@ test.afterAll(async () => {
 
 test.beforeEach(async ({ page }) => {
   await page.goto(taskURL);
-  await page.waitForLoadState('load');
+  await page.waitForLoadState("load");
 });
 
-test('are all images loaded properly', async({ page }) => {
+test("are all images loaded properly", async ({ page }) => {
   const brokenImages = await page.evaluate(() => {
-    const images = Array.from(document.querySelectorAll('img'));
+    const images = Array.from(document.querySelectorAll("img"));
     const brokenImagesList = [];
 
     for (const image of images) {
@@ -41,12 +41,11 @@ test('are all images loaded properly', async({ page }) => {
   }
 
   expect(brokenImages).toEqual([]);
-    // Return a custom result object
-    const testResult = {
-        totalImages: brokenImages.length,
-        brokenImages,
-      };
-    
-      return testResult;
-    
+  // Return a custom result object
+  const testResult = {
+    totalImages: brokenImages.length,
+    brokenImages
+  };
+
+  return testResult;
 });

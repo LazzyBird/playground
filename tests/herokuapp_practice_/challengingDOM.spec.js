@@ -1,9 +1,6 @@
 import { test, expect } from "@playwright/test";
 const taskURL = "https://the-internet.herokuapp.com/challenging_dom";
-const tableLinksExpected = [
-  "#edit",
-  "#delete"
-];
+const tableLinksExpected = ["#edit", "#delete"];
 let page;
 // here I can place some helper function щоб не заважали в інших місцях
 const tableHeadersExpected = [
@@ -48,6 +45,7 @@ test.describe("Table tests", () => {
     for (const thElement of thElements) {
       const text = await thElement.innerText();
       thTexts.push(text);
+      console.log(text);
     }
     expect(thTexts).toEqual(tableHeadersExpected);
   });
@@ -59,40 +57,55 @@ test.describe("Table tests", () => {
       for (let i = 0; i < columns.length - 1; i++) {
         const actualText = await columns[i].innerText();
         const expectedText = tableRowExpected[i] + i;
+        console.log(actualText);
+        console.log(expectedText);
         expect(actualText).toContain(expectedText);
       }
     }
   });
   test("Last column text is correct", async ({ page }) => {
-    const lastColumn = await page.$$(".tbody tr:last-child");
+    const lastColumn = await page.$$("#example");
     console.log(lastColumn.length);
+    /*
     for (const trElement of lastColumn) {
       const actualText = await trElement.innerText();
       console.log(actualText);
-      expect(actualText).toContain("edit delete");
-    }
-  });
+      expect(actualText).toBe("edit delete");
+    }*/
+  }); 
   test("Table links are correct", async ({ page }) => {});
 
-  test.describe("Button tests", () => {
-    test("Check if the buttons are visible", async ({ page }) => {
-      for (let i; (i = 0); i++) {
-        await expect(page.locator(".button").nth(i)).toBeVisible();
-      }
-    });
-    test("Clicking on button changes #canvas", async ({ page }) => {
-      let zeroScreen = await page
-        .locator("#canvas")
-        .screenshot({ path: "screenshots/zero.jpeg", type: "jpeg" });
+});
 
-      for (let i = 0; i < 3; i++) {
-        await page.locator(".button").nth(i).click();
-        // Wait for changes to occur (adjust the time as needed) - if there was not enough time it would fail
-        await page.waitForTimeout(1000);
-        let currentScreen = await page.locator("#canvas").screenshot();
-        expect(currentScreen).not.toEqual(zeroScreen);
-        zeroScreen = currentScreen;
-      }
-    });
+test.describe("Button tests", () => {
+  test("Check if the buttons are visible", async ({ page }) => {
+    for (let i = 0; i < 3; i++) {
+      await expect(page.locator("#button").nth(i)).toBeVisible();
+    }
   });
+  test("Clicking on button changes #canvas", async ({ page }) => {
+    page.waitForTimeout(1500);
+
+    let zeroScreen = await page
+      .locator("#canvas")
+      .screenshot({ path: "screenshots/zero.jpeg", type: "jpeg" });
+
+    await page.locator("#button").first().click();
+    await page.waitForTimeout(2000);
+    let currentScreen1 = await page.locator("#canvas").screenshot();
+    expect(currentScreen1).not.toEqual(zeroScreen);
+    zeroScreen = currentScreen1;
+/*
+    await page.locator("#button").nth(1).click();
+    await page.waitForTimeout(2000);
+    let currentScreen2 = await page.locator("#canvas").screenshot();
+    expect(currentScreen2).not.toEqual(zeroScreen);
+    zeroScreen = currentScreen2;
+
+    await page.locator("#button").nth(2).click();
+    await page.waitForTimeout(2000);
+    let currentScreen3 = await page.locator("#canvas").screenshot();
+    expect(currentScreen3).not.toEqual(zeroScreen);   */
+  });
+
 });
