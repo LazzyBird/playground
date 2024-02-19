@@ -13,13 +13,37 @@ const tableHeadersExpected = [
   "Action"
 ];
 const tableRowExpected = [
-  "luvaret",
+  "Iuvaret",
   "Apeirian",
   "Adipisci",
   "Definiebas",
   "Consequuntur",
   "Phaedrum"
 ];
+function tableDataGen(tableRowExpected) {
+  let tableData = [];
+  for (let i = 0; i < 10; i++) {
+    let row = [];
+    for (let j = 0; j < tableRowExpected.length; j++) {
+      let newText = tableRowExpected[j] + i;
+      row.push(newText);
+    }
+    tableData.push(row);
+  }
+  return tableData;
+}
+const getTableTextData = async (page) => {
+  return await page.evaluate(() => {
+    const rows = Array.from(document.querySelectorAll("table tr"));
+    const textData = rows.map((row) => {
+      const cells = Array.from(row.querySelectorAll("td"));
+      // Exclude the last cell which contains "edit delete" links
+      const rowData = cells.slice(0, -1).map((cell) => cell.innerText);
+      return rowData;
+    });
+    return textData;
+  });
+};
 //
 
 test.beforeAll("get the page object", async ({ browser }) => {
@@ -48,33 +72,29 @@ test.describe("Table tests", () => {
     }
     expect(thTexts).toEqual(tableHeadersExpected);
   });
-  // tests below are unreliable and need to be reviewed and rewritten
+  // test for table content is rewritten well, functions are put out from the test and work properly. Obtained content data verified 
   test("Table text content is correct", async ({ page }) => {
-    const tableRows = await page.$$(".tbody tr");
-    for (const trElement of tableRows) {
-      const columns = await trElement.$$("td");
-      for (let i = 0; i < columns.length - 1; i++) {
-        const actualText = await columns[i].innerText();
-        const expectedText = tableRowExpected[i] + i;
-        expect(actualText).toContain(expectedText);
-      }
-    }
+    const generatedTableData = tableDataGen(tableRowExpected);
+    const generatedTableText = generatedTableData.flat();
+    const obtainedTableText = (await getTableTextData(page)).flat();
+    expect(obtainedTableText).toEqual(generatedTableText);
   });
-  test("Last column text is correct", async ({ page }) => {
-    const lastColumn = await page.$$("#example");
-    console.log(lastColumn.length);
-    /*
+});
+test("Last column text is correct", async ({ page }) => {
+  const lastColumn = await page.$$("#example");
+  console.log(lastColumn.length);
+  /*
     for (const trElement of lastColumn) {
       const actualText = await trElement.innerText();
       console.log(actualText);
       expect(actualText).toBe("edit delete");
     }*/
-  });
-  test("Table links are correct", async ({ page }) => {});
 });
+test("Table links are correct", async ({ page }) => {});
+// empty test
 // button tests are reliable and checked for correctness
 test.describe("Button tests", () => {
-  test("Clicking on button changes #canvas", async ({ page }) => {
+  test("Clicking on 1st button changes #canvas", async ({ page }) => {
     page.waitForTimeout(1500);
     let zeroScreen = await page
       .locator("#canvas")
@@ -87,4 +107,3 @@ test.describe("Button tests", () => {
     zeroScreen = currentScreen1;
   });
 });
-
