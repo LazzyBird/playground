@@ -20,6 +20,11 @@ const tableRowExpected = [
   "Consequuntur",
   "Phaedrum"
 ];
+const sampleLastCell = [
+  { text: "edit", href: "#edit" },
+  { text: "delete", href: "#delete" }
+];
+
 function tableDataGen(tableRowExpected) {
   let tableData = [];
   for (let i = 0; i < 10; i++) {
@@ -44,6 +49,24 @@ const getTableTextData = async (page) => {
     return textData;
   });
 };
+const lastColumnData = async (page) => {
+  return await page.evaluate(() => {
+    const rows = Array.from(document.querySelectorAll("table tr"));
+    const linkData = rows.map((row) => {
+      const lastCell = row.querySelector("td:last-child");
+      const anchors = Array.from(lastCell.querySelectorAll("a"));
+
+      return anchors.map((anchor) => {
+        return {
+          text: anchor.innerText,
+          href: anchor.getAttribute("href")
+        };
+      });
+    });
+    return linkData;
+  });
+};
+
 //
 
 test.beforeAll("get the page object", async ({ browser }) => {
@@ -72,7 +95,7 @@ test.describe("Table tests", () => {
     }
     expect(thTexts).toEqual(tableHeadersExpected);
   });
-  // test for table content is rewritten well, functions are put out from the test and work properly. Obtained content data verified 
+  // test for table content is rewritten well, functions are put out from the test and work properly. Obtained content data verified
   test("Table text content is correct", async ({ page }) => {
     const generatedTableData = tableDataGen(tableRowExpected);
     const generatedTableText = generatedTableData.flat();
@@ -80,18 +103,20 @@ test.describe("Table tests", () => {
     expect(obtainedTableText).toEqual(generatedTableText);
   });
 });
-test("Last column text is correct", async ({ page }) => {
-  const lastColumn = await page.$$("#example");
-  console.log(lastColumn.length);
-  /*
-    for (const trElement of lastColumn) {
-      const actualText = await trElement.innerText();
-      console.log(actualText);
-      expect(actualText).toBe("edit delete");
-    }*/
+test("Last column text and anchor same as sample object sampleLastCell from prerequisite data", async ({ page }) => {
+  /*const lastColumn = await page.$$("#example");
+ console.log(lastColumn.length);
+  for (const trElement of lastColumn) {
+    const actualText = await trElement.innerText();
+    console.log(actualText);
+    expect(actualText).toBe("edit delete");
+  }*/
+  const obtainedLastColumnData = await lastColumnData(page);
+  obtainedLastColumnData.forEach((links) => {
+    expect(links).toEqual(sampleLastCell);
+  });
 });
-test("Table links are correct", async ({ page }) => {});
-// empty test
+
 // button tests are reliable and checked for correctness
 test.describe("Button tests", () => {
   test("Clicking on 1st button changes #canvas", async ({ page }) => {
