@@ -1,5 +1,4 @@
 import { test, expect } from "@playwright/test";
-import { type } from "os";
 const taskURL = "https://the-internet.herokuapp.com/challenging_dom";
 const tableLinksExpected = ["#edit", "#delete"];
 let page;
@@ -52,27 +51,23 @@ const getTableTextData = async (page) => {
 };
 const lastColumnData = async (page) => {
   return await page.evaluate(() => {
-    const rows = Array.from(document.querySelectorAll("table tr"));
+    const rows = Array.from(
+      document.querySelectorAll("table tr:not(:first-child)")
+    );
     const links = [];
-
-    rows.forEach((row, index) => {
+    rows.forEach((row) => {
       const lastCell = row.lastElementChild;
       if (lastCell) {
-        const rowLinks = Array.from(lastCell.querySelectorAll("a")).map(
-          (link) => {
-            return { text: link.innerText, href: link.getAttribute("href") };
-          }
-        );
-        links.push(rowLinks.slice(1));
-      } else {
-        console.error(
-          `No last cell found in row ${index + 1}. Row content:`,
-          row.innerHTML
-        );
-        links.push(null);
+        const rowLinks = [];
+        lastCell.querySelectorAll("a").forEach((link) => {
+          rowLinks.push({
+            text: link.innerText,
+            href: link.getAttribute("href")
+          });
+        });
+        links.push(rowLinks);
       }
     });
-
     return links;
   });
 };
@@ -112,21 +107,37 @@ test.describe("Table tests", () => {
     expect(obtainedTableText).toEqual(generatedTableText);
   });
 });
-test("Last column text and anchor are the same as sample object sampleLastCell from prerequisite data", async ({
+// this test is verified for obtained and sample data, works fine
+test("Last column verification with generated sample array", async ({
   page
 }) => {
   const obtainedLastColumnData = await lastColumnData(page);
-  console.log(obtainedLastColumnData, typeof obtainedLastColumnData);
-  
-  obtainedLastColumnData.forEach((links) => {
-    expect(links).toEqual(sampleLastCell);
+  const sampleArray = Array(obtainedLastColumnData.length).fill(sampleLastCell);
+  expect(obtainedLastColumnData).toEqual(sampleArray);
+});
+// this test is verified for outcome, data compared correctly
+test("Last column verification with for.. of", async ({ page }) => {
+  const obtainedLastColumnData = await lastColumnData(page);
+  for (const x of obtainedLastColumnData) {
+    console.log(x);
+    expect(x).toEqual(sampleLastCell, `something went wrong`);
+  }
+});
+// this test is verified for outcome, data compared correctly
+test(`last cell test with forEach`, async ({ page }) => {
+  const obtainedLastColumnData = await lastColumnData(page);
+  obtainedLastColumnData.forEach((row, rowIndex) => {
+    console.log(row);
+    expect(row).toEqual(
+      sampleLastCell,
+      `Row at index ${rowIndex} does not match the expected structure.`
+    );
   });
 });
-
 // button tests are reliable and checked for correctness
 test.describe("Button tests", () => {
   test("Clicking on 1st button changes #canvas", async ({ page }) => {
-    //as far as it is complicated to get all three buttons and go around them - loop starts from 2nd button, 'cause for some reason browser does not change .nth(0) to .first, I decided to put them separately
+    //as far as it is complicated to get all three buttons and go around them - loop starts from 2nd button, 'cause for some reason browser does not change .nth(0) to .first, I decided to put them separately - no need to repeat with .nth(1) and .nth(2) elements. Just checking as separate functionality with different cases.
     page.waitForTimeout(1500);
     let zeroScreen = await page
       .locator("#canvas")
@@ -136,6 +147,6 @@ test.describe("Button tests", () => {
     await page.waitForTimeout(2000);
     let currentScreen1 = await page.locator("#canvas").screenshot();
     expect(currentScreen1).not.toEqual(zeroScreen);
-    zeroScreen = currentScreen1;
+    zeroScreen = currentScreen1; // updates sample screenshot of the element
   });
 });
