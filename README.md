@@ -1,3 +1,2 @@
 - AQA elements testing practice (https://the-internet.herokuapp.com/)
-- API testing practice (
 - CISCO JSE1 and JSE2 practice and labs
