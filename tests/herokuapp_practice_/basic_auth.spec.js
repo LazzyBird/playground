@@ -58,14 +58,28 @@ test("Clicking cancel leads to 401", async ({ page }) => {
 test("entering credintials  in prompt field and clicking ok leads to 200", async ({
   page
 }) => {
-  page.on("dialog", async (dialog) => {
-    await dialog.accept(credentials.username, credentials.password);
-    await page.goto(taskURL, { waitUntil: "load" });
-  });
-  // await page.goto(taskURL, { waitUntil: "load" });
+  await page.goto(taskURL);
+  console.log(await page.content());
+  /*
+  const dialog = await page.waitForEvent("dialog");
+  await dialog.accept(credentials.username, credentials.password);
+  await page.waitForLoadState();
   await expect(page.locator("p")).toHaveText(
     "Congratulations! You must have the proper credentials."
   ); /// ahahaha page is not loaded until prompt dialog is handled
   /*let response = await page.request.get(taskURL);
   expect(response.status()).toBe(200); */
+});
+test("HTTP Authentication", async ({ page }) => {
+  await page.route("**/*", (route) => {
+    const credentialsOut = `${credentials.username}:${credentials.password}`;
+    const authHeader =
+      "Basic " + Buffer.from(credentialsOut).toString("base64");
+    route.continue({ headers: { Authorization: authHeader } });
+  });
+  await page.goto(taskURL);
+  await page.waitForSelector("p");
+  await expect(page.locator("p")).toHaveText(
+    "Congratulations! You must have the proper credentials."
+  );
 });

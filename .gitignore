@@ -49,7 +49,7 @@ playwright-report/
 screenshots/
 shiftingMenuElement.spec.js-snapshots/
 *.png
-
+tests/working/
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
