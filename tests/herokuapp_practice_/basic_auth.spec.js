@@ -6,7 +6,7 @@ let taskURLwithCredentials =
 test("response status code is 401 until authenticated", async ({ request }) => {
   let response = await request.get(taskURL);
   expect(response.status()).toBe(401);
-});
+}); // ok
 
 test("Valid credentials added in http credentials", async ({
   page,
@@ -18,7 +18,7 @@ test("Valid credentials added in http credentials", async ({
   await expect(page.locator("p")).toHaveText(
     "Congratulations! You must have the proper credentials."
   );
-});
+}); // ok
 
 test("Basic Auth Demo with valid credentials added in context", async ({
   browser
@@ -31,31 +31,37 @@ test("Basic Auth Demo with valid credentials added in context", async ({
   });
 
   const page = await context.newPage();
-  await page.goto("taskURL");
-  await expect(page.locator("div.example>h3")).toHaveText("Basic Auth");
+  await page.goto(taskURL);
+  await expect(page.locator("p")).toHaveText(
+    "Congratulations! You must have the proper credentials."
+  );
+}); // ok
+
+test("Clicking sign in without credentials leads to 401", async ({ page }) => {
+  await page.goto(taskURL);
+  let response = await page.request.get(taskURL);
+  page.on("dialog", (dialog) => dialog.accept());
+  expect(response.status()).toBe(401);
+}); // ok
+
+test("Clicking cancel leads to 401", async ({ page }) => {
+  await page.goto(taskURL);
+  let response = await page.request.get(taskURL);
+  page.on("dialog", (dialog) => dialog.dismiss());
+  expect(response.status()).toBe(401);
+}); // ok
+
+test("entering credintials  in prompt field and clicking ok leads to 200", async ({
+  page
+}) => {
+  await page.goto(taskURL);
+  page.on("dialog", async (dialog) => {
+    await dialog.accept("admin", "admin"); 
+  });
+  page.waitForTimeout(500);
+  await expect(page.locator("p")).toHaveText(
+    "Congratulations! You must have the proper credentials."
+  ); /// ahahaha page is not loaded until prompt dialog is handled
+  /*let response = await page.request.get(taskURL);
+  expect(response.status()).toBe(200); */
 });
-
-test("Clicking sign in without credentials leads to 401", async ({ page, request }) => {
-    await page.goto(taskURL);
-    let response = await page.request.get(taskURL);
-  page.on("dialog", dialog  => dialog.accept());
-    expect(response.status()).toBe(401);
-  });
-
-  test("Clicking cancel leads to 401", async ({ page, request }) => {
-    await page.goto(taskURL);
-    let response = await page.request.get(taskURL);
-  page.on("dialog", dialog  => dialog.dismiss());
-    expect(response.status()).toBe(401);
-  });
-
-  test('entering credintials  in prompt field and clicking ok leads to 200', async ({ page }) => {
-    await page.goto(taskURL);
-    page.on("dialog", async (dialog) => {
-      await dialog.accept("admin", "admin");
-    });
-    let response = await page.request.get(taskURL);
-    expect(response.status()).toBe(200);
-  });
-
-  
