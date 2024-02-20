@@ -54,7 +54,7 @@ test("Clicking cancel leads to 401", async ({ page }) => {
   page.on("dialog", (dialog) => dialog.dismiss());
   expect(response.status()).toBe(401);
 }); // ok
-
+// this is the Playwright limitation on handling dialogue window no unauthorized page:
 test("entering credintials  in prompt field and clicking ok leads to 200", async ({
   page
 }) => {
