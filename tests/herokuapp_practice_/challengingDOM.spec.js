@@ -1,6 +1,5 @@
 import { test, expect } from "@playwright/test";
 const taskURL = "https://the-internet.herokuapp.com/challenging_dom";
-const tableLinksExpected = ["#edit", "#delete"];
 let page;
 // here I can place some helper function щоб не заважали в інших місцях
 const tableHeadersExpected = [
