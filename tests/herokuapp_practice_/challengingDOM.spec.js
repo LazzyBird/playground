@@ -117,10 +117,10 @@ test("Last column text and anchor are the same as sample object sampleLastCell f
 }) => {
   const obtainedLastColumnData = await lastColumnData(page);
   console.log(obtainedLastColumnData, typeof obtainedLastColumnData);
-  /*
+  
   obtainedLastColumnData.forEach((links) => {
     expect(links).toEqual(sampleLastCell);
-  });*/
+  });
 });
 
 // button tests are reliable and checked for correctness
