@@ -1,6 +1,6 @@
-const { test, expect } = require('@playwright/test');
-
-const taskURL = "https://the-internet.herokuapp.com/add_remove_elements/";
+import { test, expect } from '@playwright/test';
+import Env from "@helpers/env";
+const taskURL = (Env.URL + "add_remove_elements/");
 let page;
 
 test.beforeAll(async ({ browser }) => {
