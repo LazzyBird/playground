@@ -19,7 +19,7 @@ const getCardNumber = async (page) => {
 }
 
 // create object constructor to fill it with data grabbed from page's card
-const achievementCard = {
+const AchievementCard = {
  
 }
 // create sample object with expected properties 

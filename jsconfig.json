@@ -1,0 +1,13 @@
+{
+  "compilerOptions": {
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "types": ["jest"],
+    "paths": {
+      "@datafactory/*": ["lib/datafactory/*"],
+      "@helpers/*": ["lib/helpers/*"],
+      "@fixtures/*": ["lib/fixtures/*"]
+    }
+  },
+  "include": ["tests/**/*"]
+}
