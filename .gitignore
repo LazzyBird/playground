@@ -47,9 +47,7 @@ test-examples/
 test-results/
 playwright-report/
 screenshots/
-shiftingMenuElement.spec.js-snapshots/
 *.png
-working_/
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
@@ -81,7 +79,7 @@ web_modules/
 .yarn-integrity
 
 # dotenv environment variable files
-.env
+# .env
 .env.development.local
 .env.test.local
 .env.production.local
