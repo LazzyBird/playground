@@ -9,5 +9,5 @@
       "@fixtures/*": ["lib/fixtures/*"]
     }
   },
-  "include": ["tests/**/*"]
+  "include": ["tests/**/*", "lib/datafactory/challengingDOM_helperDataGen.js"]
 }
