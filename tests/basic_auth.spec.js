@@ -3,6 +3,7 @@ import Env from "@helpers/env";
 
 const taskURL = Env.URL + "basic_auth";
 const taskURLwithCredentials = Env.CRED_URL;
+const taskURLInvCred = Env.INV_CRED_URL;
 const credentials = {
   username: Env.ADMIN_NAME,
   password: Env.ADMIN_PASSWORD,
@@ -19,6 +20,14 @@ test("Valid credentials added in http credentials", async ({ page, request }) =>
   await page.goto(taskURLwithCredentials);
   await expect(page.locator("p")).toHaveText("Congratulations! You must have the proper credentials.");
 }); // ok
+// щось тут не те - повертає Promise{<pending>} в консоль
+test("Invalid credentials added in http credentials", async ({ page, request }) => {
+  //let response = await request.get(taskURLInvCred);
+  //expect(response.status()).toBe(401);
+  await page.goto(taskURLInvCred);
+  
+ // expect(page.getByText("Not authorized")).toBeTruthy();
+});
 
 test("Basic Auth Demo with valid credentials added in context", async ({ browser }) => {
   const context = await browser.newContext({
@@ -32,13 +41,13 @@ test("Basic Auth Demo with valid credentials added in context", async ({ browser
   expect(response.status()).toBe(200);
 }); // ok
 // перепровірити цей тест, бо дефолт відповідь 401
-/// гаааа воно працювало а тепер ніБ як й той що нижче аааАААаАаАаА
+/// гаааа воно працювало а тепер ні як й той що нижче аааАААаАаАаА
 test("Clicking sign in without credentials leads to 401", async ({ page }) => {
   await page.goto(taskURL);
   page.on("dialog", (dialog) => dialog.accept());
   let response = await page.request.get(taskURL);
   expect(response.status()).toBe(401);
-}); // ok
+});
 // перепровірити цей тест, бо дефолт відповідь 401
 test("Clicking cancel leads to 401", async ({ page }) => {
   await page.goto(taskURL);
@@ -60,7 +69,7 @@ test("entering credintials  in prompt field and clicking ok leads to 200", async
   /*let response = await page.request.get(taskURL);
   expect(response.status()).toBe(200); */
 });
-test("HTTP Authentication", async ({ page }) => {
+test("HTTP Authentication valid credentials", async ({ page }) => {
   await page.route("**/*", (route) => {
     const credentialsOut = `${credentials.username}:${credentials.password}`;
     const authHeader = "Basic " + Buffer.from(credentialsOut).toString("base64");
@@ -69,4 +78,13 @@ test("HTTP Authentication", async ({ page }) => {
   await page.goto(taskURL);
   await page.waitForSelector("p");
   await expect(page.locator("p")).toHaveText("Congratulations! You must have the proper credentials.");
-});
+}); //ok
+test("HTTP Authentication invalid credentials", async ({ page }) => {
+  await page.route("**/*", (route) => {
+    const credentialsOut = `"":""`;
+    const authHeader = "Basic " + Buffer.from(credentialsOut).toString("base64");
+    route.continue({ headers: { Authorization: authHeader } });
+  });
+  let response = await page.request.get(taskURL);
+  expect(response.status()).toBe(401);
+}); //ok
