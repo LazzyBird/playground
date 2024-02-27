@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-const taskURL = "https://the-internet.herokuapp.com/challenging_dom";
+import Env from "@helpers/env";
+const taskURL = `${Env.URL} +"challenging_dom"`;
 let page;
 // here I can place some helper function щоб не заважали в інших місцях
 const tableHeadersExpected = [
