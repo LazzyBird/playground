@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
-import 
+import checkAndListImages from "@datafactory";
 const taskURL = Env.URL + "broken_images";
 let page;
 
@@ -18,6 +18,6 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("are all images loaded properly?", async ({ page }) => {
-
+  await checkAndListImages(page);
     expect(brokenImages).toEqual([]);
 });
