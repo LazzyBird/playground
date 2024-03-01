@@ -15,8 +15,8 @@ test.beforeEach(async ({ page }) => {
   await page.waitForLoadState("load");
 });
 
-test("are all images loaded properly?", async ({ page }) => {
-  const brokenImages = checkImages(page);
-  const result = reportImages(brokenImages);
+test("Images are loaded properly", async ({ page }) => {
+  const brokenImages = await checkImages(page);
+  reportImages(brokenImages);
   expect(brokenImages).toEqual([]);
 });
