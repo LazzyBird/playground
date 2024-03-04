@@ -33,4 +33,5 @@ test("Images are loaded properly", async ({ page }) => {
 test("Img.src return !404 response status code", async ({ page }) => {
   const imagesSrc = await checkImgSrc(page);
   expect(imagesSrc.length).toEqual(2);// 2 on purpose because of 2 broken images
+  
 });
