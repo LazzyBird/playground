@@ -26,15 +26,11 @@ test("Images are loaded properly", async ({ page }) => {
   // або
   //  expect(brokenImages).toContain("https://the-internet.herokuapp.com/asdf.jpg");
   // expect(brokenImages).toContain("https://the-internet.herokuapp.com/hjkl.jpg");
-  // або
+  // або імпорт з зовнішнього файла
   // importedListOfBrokenImages = ["https://the-internet.herokuapp.com/asdf.jpg", "https://the-internet.herokuapp.com/hjkl.jpg"]
   // expect(brokenImages).toEqual(importedListOfBrokenImages)
 });
 test("Img.src return !404 response status code", async ({ page }) => {
-  const brokenImagesSrc = await checkImgSrc(page);
-  console.log(brokenImagesSrc)
-  /* const reportDataImages = generateReportData(brokenImagesSrc, checkImgSrc);
-  reportData(reportDataImages);
-  expect(brokenImagesSrc.length).toEqual([]);// or toBeFalsy() ???
-  */
-})
+  const imagesSrc = await checkImgSrc(page);
+  expect(imagesSrc.length).toEqual(2);// 2 on purpose because of 2 broken images
+});
