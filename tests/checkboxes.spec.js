@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-const taskURL = "https://the-internet.herokuapp.com/checkboxes";
+import Env from "@helpers/env";
+const taskURL = Env.URL + "checkboxes";
 let page;
 
 test.beforeAll("get the page object", async ({ browser }) => {
@@ -23,7 +24,7 @@ test("checkboxes are in the viewport", async ({ page }) => {
 });
 test("on page load secont checkbox is checked", async ({ page }) => {
   await expect(page.getByRole("checkbox").nth(1)).toBeChecked();
- });
+});
 test("the first checkbox can be checked", async ({ page }) => {
   await page.getByRole("checkbox").nth(0).check();
   await expect(page.getByRole("checkbox").nth(0)).toBeChecked();
