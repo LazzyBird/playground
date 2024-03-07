@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
 import { checkImages, checkImgSrc } from "@datafactory/brokenImagesHelper";
-// import { generateReportData, reportData } from "@helpers/reportHelper";
+import { putReport } from "@helpers/reportHelper";
+
 const taskURL = Env.URL + "broken_images";
 let page;
 //
@@ -23,5 +24,6 @@ test("Images are loaded properly", async ({ page }) => {
 });
 test("Img.src return !404 response status code", async ({ page }) => {
   const imagesSrc = await checkImgSrc(page);
-  // expect(imagesSrc.length).toEqual(0);
+  expect(imagesSrc.length).toEqual(0);
+  await putReport(imagesSrc, checkImgSrc);
 });

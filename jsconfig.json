@@ -6,7 +6,8 @@
     "paths": {
       "@datafactory/*": ["lib/datafactory/*"],
       "@helpers/*": ["lib/helpers/*"],
-      "@fixtures/*": ["lib/fixtures/*"]
+      "@fixtures/*": ["lib/fixtures/*"],
+      "@data_assets/*": ["lib/data_assets/*"]
     }
   },
   "include": ["tests/**/*", "lib/datafactory/challengingDOM_helperDataGen.js"]

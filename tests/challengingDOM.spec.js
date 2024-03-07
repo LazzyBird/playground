@@ -1,77 +1,8 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
+import { tableRowExpected, tableHeadersExpected, sampleLastCell} from "@data_assets/challengingDOM";
 const taskURL = `${Env.URL} +"challenging_dom"`;
 let page;
-// here I can place some helper function щоб не заважали в інших місцях
-const tableHeadersExpected = [
-  "Lorem",
-  "Ipsum",
-  "Dolor",
-  "Sit",
-  "Amet",
-  "Diceret",
-  "Action"
-];
-const tableRowExpected = [
-  "Iuvaret",
-  "Apeirian",
-  "Adipisci",
-  "Definiebas",
-  "Consequuntur",
-  "Phaedrum"
-];
-const sampleLastCell = [
-  { text: "edit", href: "#edit" },
-  { text: "delete", href: "#delete" }
-];
-
-function tableDataGen(tableRowExpected) {
-  let tableData = [];
-  for (let i = 0; i < 10; i++) {
-    let row = [];
-    for (let j = 0; j < tableRowExpected.length; j++) {
-      let newText = tableRowExpected[j] + i;
-      row.push(newText);
-    }
-    tableData.push(row);
-  }
-  return tableData;
-}
-const getTableTextData = async (page) => {
-  return await page.evaluate(() => {
-    const rows = Array.from(document.querySelectorAll("table tr"));
-    const textData = rows.map((row) => {
-      const cells = Array.from(row.querySelectorAll("td"));
-      // Exclude the last cell which contains "edit delete" links
-      const rowData = cells.slice(0, -1).map((cell) => cell.innerText);
-      return rowData;
-    });
-    return textData;
-  });
-};
-const lastColumnData = async (page) => {
-  return await page.evaluate(() => {
-    const rows = Array.from(
-      document.querySelectorAll("table tr:not(:first-child)")
-    );
-    const links = [];
-    rows.forEach((row) => {
-      const lastCell = row.lastElementChild;
-      if (lastCell) {
-        const rowLinks = [];
-        lastCell.querySelectorAll("a").forEach((link) => {
-          rowLinks.push({
-            text: link.innerText,
-            href: link.getAttribute("href")
-          });
-        });
-        links.push(rowLinks);
-      }
-    });
-    return links;
-  });
-};
-//
 
 test.beforeAll("get the page object", async ({ browser }) => {
   page = await browser.newPage();
