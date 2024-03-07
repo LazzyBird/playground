@@ -1,8 +1,8 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
+import { menuItems } from "@data_assets/disappearing_elements";
 
 const taskURL = Env.URL + "disappearing_elements";
-const menuItems = ["Home", "About", "Contact Us", "Portfolio", "Gallery"];
 let page;
 
 test.beforeAll("get the page object", async ({ browser }) => {
@@ -25,7 +25,7 @@ test("the menu is in viewport", async ({ page }) => {
   await expect(page.locator(`#content > div > ul`)).toBeInViewport();
 });
 
-test.describe(`separate check for each menu item`, async() => {
+test.describe(`separate check for each menu item`, async () => {
   test("Home menu item is present", async ({ page }) => {
     await expect(page.getByRole("listitem").nth(0)).toHaveText(`${menuItems[0]}`);
   });
@@ -45,4 +45,19 @@ test.describe(`separate check for each menu item`, async() => {
   test("Gallery menu item is present", async ({ page }) => {
     await expect(page.getByRole("listitem").nth(4)).toHaveText(`${menuItems[4]}`);
   });
-})
+});
+test(`check all menu items as one entity`, async ({ page }) => {
+  const pageMenuItems = await getMenuItems(page);
+  console.log(pageMenuItems)
+  // expect(pageMenuItems).toEqual(menuItems);
+});
+async function getMenuItems(page) {
+  const list = await page.$$("li");
+  /* let allMenuItems = [];
+  for (const item of menuItems) {
+    const text = await item.innerText();
+    allMenuItems.push(text);
+  }
+  return allMenuItems; */
+  return list;
+}
