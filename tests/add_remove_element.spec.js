@@ -1,6 +1,6 @@
 import { test, expect } from '@playwright/test';
 import Env from "@helpers/env";
-const taskURL = (Env.URL + "add_remove_elements/");
+const taskURL = Env.URL + "add_remove_elements/";
 let page;
 
 test.beforeAll(async ({ browser }) => {

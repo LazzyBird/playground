@@ -1,7 +1,8 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
-import { tableRowExpected, tableHeadersExpected, sampleLastCell} from "@data_assets/challengingDOM";
-const taskURL = `${Env.URL} +"challenging_dom"`;
+import { getTableTextData, lastColumnData, getTableHeaders } from "@datafactory/challengingDOM_helper";
+import {tableHeadersExpected, tableRowExpected, sampleLastCell} from "@data_assets/challengingDOM"
+const taskURL = Env.URL +"challenging_dom";
 let page;
 
 test.beforeAll("get the page object", async ({ browser }) => {
@@ -15,25 +16,19 @@ test.afterAll(async () => {
 test.beforeEach("Open URL", async ({ page }) => {
   await page.goto(`${taskURL}`, { timeout: 30000 });
 });
-
+//TODO: rewrite test after helper setups
 test.describe("Table tests", () => {
   test("Check if the table is visible", async ({ page }) => {
     await expect(page.getByRole("table")).toBeVisible();
   });
 
   test("Check if the table headers are correct", async ({ page }) => {
-    const thElements = await page.$$("th");
-    let thTexts = [];
-    for (const thElement of thElements) {
-      const text = await thElement.innerText();
-      thTexts.push(text);
-    }
+    const thTexts = await getTableHeaders(page);
     expect(thTexts).toEqual(tableHeadersExpected);
   });
   // test for table content is rewritten well, functions are put out from the test and work properly. Obtained content data verified
   test("Table text content is correct", async ({ page }) => {
-    const generatedTableData = tableDataGen(tableRowExpected);
-    const generatedTableText = generatedTableData.flat();
+    const generatedTableText = tableDataGen(tableRowExpected).flat();
     const obtainedTableText = (await getTableTextData(page)).flat();
     expect(obtainedTableText).toEqual(generatedTableText);
   });
