@@ -2,10 +2,11 @@ import { expect } from "@playwright/test";
 import Env from "@helpers/env";
 import { menuItems } from "@data_assets/disappearing_elements";
 import { getMenuItems } from "@datafactory/disappearing_elements";
-import { mainFlow as test } from "@fixtures/myTest";
+import { setUp as test } from "@fixtures/myTest";
 const taskURL = Env.URL + 'disappearing_elements'
 
-test("Home menu item leads to HomesiteApp", async ({ siteApp }) => {
+test("Home menu item leads to Homepage", async ({ siteApp }) => {
+  await siteApp.goto(taskURL);
   await siteApp.getByText("Home").click();
   await siteApp.waitForEvent("domcontentloaded");
   expect(siteApp.url()).toBe(Env.URL);
