@@ -3,7 +3,7 @@ import Env from "@helpers/env";
 import { menuItems } from "@data_assets/disappearing_elements";
 import { getMenuItems } from "@datafactory/disappearing_elements";
 import { setUp as test } from "@fixtures/myTest";
-const taskURL = Env.URL + 'disappearing_elements'
+export const taskURL = Env.URL + "disappearing_elements";
 
 test("Home menu item leads to Homepage", async ({ siteApp }) => {
   await siteApp.goto(taskURL);
@@ -17,6 +17,7 @@ test("there are all 5 menu items (text content doesn't matter)", async ({ siteAp
 });
 
 test("the menu is in viewport", async ({ siteApp }) => {
+  await siteApp.goto(taskURL);
   await expect(siteApp.locator(`#content > div > ul`)).toBeInViewport();
 });
 
