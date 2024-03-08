@@ -1,7 +1,7 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
 import { menuItems } from "@data_assets/disappearing_elements";
-
+import { getMenuItems } from "@datafactory/disappearing_elements";
 const taskURL = Env.URL + "disappearing_elements";
 let page;
 
@@ -16,8 +16,14 @@ test.afterAll(async () => {
 test.beforeEach("Open URL", async ({ page }) => {
   await page.goto(`${taskURL}`, { timeout: 30000 });
 });
-
-test("there are all text items", async ({ page }) => {
+const myTest = test.extend({
+  siteApp: async ({}, use) => {
+    console.log("setup");
+    await use("hello");
+    console.log("teardown");
+  },
+});
+test("there are all menu items (text content doesn't matter)", async ({ page }) => {
   await expect(page.getByRole("listitem")).toHaveCount(5);
 });
 
@@ -46,18 +52,9 @@ test.describe(`separate check for each menu item`, async () => {
     await expect(page.getByRole("listitem").nth(4)).toHaveText(`${menuItems[4]}`);
   });
 });
-test(`check all menu items as one entity`, async ({ page }) => {
+test(`each expected menu item is present, no matter the order`, async ({ page }) => {
   const pageMenuItems = await getMenuItems(page);
-  console.log(pageMenuItems)
-  // expect(pageMenuItems).toEqual(menuItems);
+  menuItems.forEach((item) => {
+    expect(pageMenuItems).toContain(item);
+  });
 });
-async function getMenuItems(page) {
-  const list = await page.$$("li");
-  /* let allMenuItems = [];
-  for (const item of menuItems) {
-    const text = await item.innerText();
-    allMenuItems.push(text);
-  }
-  return allMenuItems; */
-  return list;
-}
