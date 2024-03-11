@@ -2,17 +2,20 @@ import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
 import { getTableTextData, lastColumnData, getTableHeaders } from "@datafactory/challengingDOM_helper";
 import { tableHeadersExpected, tableRowExpected, sampleLastCell } from "@data_assets/challengingDOM";
+import { tableDataGen } from "@datafactory/challengingDOM_helperDataGen";
 const taskURL = Env.URL + "challenging_dom";
+let page;
 
-test.beforeAll(async ({ browser }) => {
-  let context = await browser.newContext();
-  let page = context.newPage();
+test.beforeAll("get the page object", async ({ browser }) => {
+  page = await browser.newPage();
 });
-test.beforeEach(async ({ page }) => {
-  await page.goto(taskURL);
+
+test.afterAll(async () => {
+  await page.close();
 });
-test.afterAll(async ({ browser }) => {
-  await browser.close();
+
+test.beforeEach("Open URL", async ({ page }) => {
+  await page.goto(`${taskURL}`, { timeout: 30000 });
 });
 //TODO: rewrite test after helper setups
 test.describe("Table tests", () => {
