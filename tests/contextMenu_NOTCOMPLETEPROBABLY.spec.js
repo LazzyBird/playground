@@ -12,7 +12,7 @@ test.afterAll(async () => {
 });
 
 test.beforeEach("Open URL", async ({ page }) => {
-  await page.goto(`${taskURL}`, { timeout: 30000 });
+  await page.goto(taskURL);
 });
 
 test(" Right-click on the div id=hot-spot calls alert dialog", async ({ page }) => {

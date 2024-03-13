@@ -3,31 +3,29 @@ import Env from "@helpers/env";
 import { menuItems } from "@data_assets/disappearing_elements";
 import { getMenuItems } from "@datafactory/disappearing_elements";
 const taskURL = Env.URL + "disappearing_elements";
-let page;
 
-test.beforeAll("get the page object", async ({ browser }) => {
-  page = await browser.newPage();
+test.beforeAll(async ({ browser }) => {
+  let context = await browser.newContext();
+  let page = context.newPage();
+});
+test.beforeEach(async ({ page }) => {
+  await page.goto(taskURL);
+});
+test.afterAll(async ({ browser }) => {
+  await browser.close();
 });
 
-test.afterAll(async () => {
-  await page.close();
+test("Home menu item leads to Homepage", async ({ page }) => {
+  await page.getByText("Home").click();
+  await page.waitForEvent("domcontentloaded");
+  expect(page.url()).toBe(Env.URL);
 });
 
-test.beforeEach("Open URL", async ({ page }) => {
-  await page.goto(`${taskURL}`, { timeout: 30000 });
-});
-const myTest = test.extend({
-  siteApp: async ({}, use) => {
-    console.log("setup");
-    await use("hello");
-    console.log("teardown");
-  },
-});
-test("there are all menu items (text content doesn't matter)", async ({ page }) => {
+test("there are all 5 menu items (text content doesn't matter)", async ({ page }) => {
   await expect(page.getByRole("listitem")).toHaveCount(5);
 });
 
-test("the menu is in viewport", async ({ page }) => {
+test("the menu is in viewport - якщо деви накуролесили й воно зникло", async ({ page }) => {
   await expect(page.locator(`#content > div > ul`)).toBeInViewport();
 });
 
@@ -53,8 +51,8 @@ test.describe(`separate check for each menu item`, async () => {
   });
 });
 test(`each expected menu item is present, no matter the order`, async ({ page }) => {
-  const pageMenuItems = await getMenuItems(page);
+  const siteAppMenuItems = await getMenuItems(page);
   menuItems.forEach((item) => {
-    expect(pageMenuItems).toContain(item);
+    expect(siteAppMenuItems).toContain(item);
   });
 });
