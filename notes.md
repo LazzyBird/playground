@@ -1,6 +1,6 @@
 A/B Testing
 Add/Remove Elements +
-Basic Auth (user and pass: admin) +
+Basic Auth (user and pass: admin) + окрім авторизації через prompt - й чорт його поки знає, як зробити
 Broken Images + report+
 Challenging DOM +
 Checkboxes +
