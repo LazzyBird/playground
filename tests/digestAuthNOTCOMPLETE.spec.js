@@ -16,7 +16,7 @@ test.beforeEach("Open URL", async ({ page }) => {
 });
 */
 test(async () => {
-  {
+  { // TODO: add usage of Env.ADMIN_NAME and Env.ADMIN_PASSWORD
     // Step 1: Send a request that requires Digest authentication
     fetch(taskURL)
       .then((response) => {
