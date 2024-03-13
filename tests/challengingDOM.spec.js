@@ -27,10 +27,10 @@ test.describe("Table tests", () => {
     const thTexts = await getTableHeaders(page);
     expect(thTexts).toEqual(tableHeadersExpected);
   });
-  // test for table content is rewritten well, functions are put out from the test and work properly. Obtained content data verified
+  // ти диви, працює
   test("Table text content is correct", async ({ page }) => {
-    const generatedTableText = tableDataGen(tableRowExpected).flat();
-    const obtainedTableText = (await getTableTextData(page)).flat();
+    const generatedTableText = tableDataGen(tableRowExpected);
+    const obtainedTableText = await getTableTextData(page);
     expect(obtainedTableText).toEqual(generatedTableText);
   });
 });
