@@ -17,8 +17,10 @@ test.beforeEach("Open URL", async ({ page }) => {
 
 test(" Right-click on the div id=hot-spot calls alert dialog", async ({ page }) => {
   page.once("dialog", (dialog) => {
+    const text = dialog.message();
     console.log(`Dialog message: ${dialog.message()}`);
-    dialog.dismiss().catch(() => {});
+    dialog.dismiss().catch(() => { });
+    expect(text).toEqual("You selected a context menu");
   });
   await page.locator("#hot-spot").click({
     button: "right",
