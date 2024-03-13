@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-const taskURL = "https://the-internet.herokuapp.com/dropdown";
+import Env from "@helpers/env";
+const taskURL = Env.URL + "dropdown";
 let page;
 
 test.beforeAll("get the page object", async ({ browser }) => {
@@ -11,7 +12,7 @@ test.afterAll(async () => {
 });
 
 test.beforeEach("Open URL", async ({ page }) => {
-  await page.goto(`${taskURL}`, { timeout: 30000 });
+  await page.goto(taskURL);
 });
 
 test("Dropdown list is loaded", async ({ page }) => {
@@ -24,11 +25,7 @@ test("Dropdown list is loaded with proper placeholder", async ({ page }) => {
 });
 
 test("Dropdown list has proper options", async ({ page }) => {
-  await expect(page.locator("select")).toHaveValues([
-    "Please select an option",
-    "1",
-    "2"
-  ]);
+  await expect(page.locator("select")).toHaveValues(["Please select an option", "1", "2"]);
 });
 
 test("Dropdown expands on click", async ({ page }) => {
@@ -40,12 +37,8 @@ test("Dropdown list item 1 can be selected", async ({ page }) => {
   await page.selectOption("select", "1");
   await expect(page.locator("select")).toHaveText("Option 1");
   await expect(page.locator('option[value="1"]')).toHaveAttribute("selected");
-  await expect(page.locator('option[value="2"]')).not.toHaveAttribute(
-    "selected"
-  );
-  await expect(page.getByText("Please select an option")).toHaveAttribute(
-    "disabled"
-  );
+  await expect(page.locator('option[value="2"]')).not.toHaveAttribute("selected");
+  await expect(page.getByText("Please select an option")).toHaveAttribute("disabled");
 });
 
 test("Dropdown list item 2 can be selected", async ({ page }) => {
