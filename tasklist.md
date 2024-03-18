@@ -5,12 +5,12 @@ Broken Images + report+
 Challenging DOM +
 Checkboxes +
 Context Menu +
-Digest Authentication (user and pass: admin)
+Digest Authentication (user and pass: admin) +
 Disappearing Elements +
 Drag and Drop +
 Dropdown +
-Dynamic Content 
-Dynamic Controls
+Dynamic Content +
+Dynamic Controls +
 Dynamic Loading
 Entry Ad
 Exit Intent
@@ -39,6 +39,6 @@ Shadow DOM
 Shifting Content
 Slow Resources
 Sortable Data Tables
-Status Codes
-Typos
+Status Codes +
+Typos +-
 WYSIWYG Editor
