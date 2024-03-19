@@ -23,3 +23,4 @@ test('Digest Auth with empty creds -> 401', async () => {
   const response = await fetchWithDigestAuth(taskURL, "", "");
   expect(response.status).toBe(401);
 });
+//! Схоже що цей тест сюит можно спростити фікстурой - а то що це за DRY коли всюди стирчить ехрест респонз страус
