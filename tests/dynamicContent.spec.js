@@ -1,6 +1,7 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
-const taskURL = Env.URL + "dynamic_content?";
+const taskURL = Env.URL + "dynamic_content";
+// const partiallyStaticContentURL = taskURL + "?with_content=static";
 let page;
 async function getDescriptions(page) {
   // Use page.$$ to query for elements and get a NodeList
@@ -11,15 +12,10 @@ async function getDescriptions(page) {
 
 test.beforeAll("get the page object", async ({ browser }) => {
   page = await browser.newPage();
-  await page.goto(`${taskURL}`, { timeout: 30000 });
-});
-
-test.afterAll(async () => {
-  await page.close();
 });
 
 test.beforeEach("Open URL", async ({ page }) => {
-  await page.goto(`${taskURL}`, { timeout: 30000 });
+  await page.goto(taskURL);
 });
 
 test(`avatars are visible`, async ({ page }) => {

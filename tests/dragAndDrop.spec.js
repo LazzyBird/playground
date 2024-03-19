@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
-const taskURL = "https://the-internet.herokuapp.com/drag_and_drop";
+import Env from "@helpers/env"
+const taskURL = Env.URL + "drag_and_drop";
 let page;
 
 test.beforeAll("get the page object", async ({ browser }) => {
@@ -11,7 +12,7 @@ test.afterAll(async () => {
 });
 
 test.beforeEach("Open URL", async ({ page }) => {
-  await page.goto(`${taskURL}`, { timeout: 30000 });
+  await page.goto(taskURL);
 });
 
 test("There are two columns", async ({ page }) => {
