@@ -1,3 +1,5 @@
-export const preset = "ts-jest";
-export const testEnvironment = "node";
-export const extensionsToTreatAsEsm = [".js"];
+export default {
+    testEnvironment: 'node',
+    extensionsToTreatAsEsm: ['.js'],
+    testMatch: ['./test-unit/**/*.test.js'],
+};
