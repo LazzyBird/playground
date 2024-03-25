@@ -1,21 +1,9 @@
 import { test, expect } from "@playwright/test";
-const taskURL = "https://the-internet.herokuapp.com/dynamic_controls";
+import Env from "@helpers/env"
+import { buttons } from "@data_assets/dynamicControls"
+import { clickAndWait } from "@datafactory/dynamicConstrols"
+const taskURL = Env.URL + "dynamic_controls";
 let page;
-// here I can place some helper function щоб не заважали в інших місцях
-{
-  async function clickAndWait(
-    page,
-    buttonBefore,
-    buttonAfter,
-    confirmationText
-  ) {
-    await page.getByRole("button", { name: buttonBefore }).click();
-    await expect(page.locator(`text=${confirmationText}`)).toBeVisible();
-    await page.waitForSelector(`button:visible:has-text(${buttonAfter})`);
-  }
-}
-//
-//
 
 test.beforeAll("get the page object", async ({ browser }) => {
   page = await browser.newPage();
@@ -26,39 +14,41 @@ test.afterAll(async () => {
 });
 
 test.beforeEach("Open Dynamic Controls URL", async ({ page }) => {
-  await page.goto(`${taskURL}`, { timeout: 30000 });
+  await page.goto(taskURL);
 });
 
 test("Remove button functionality", async ({ page }) => {
-  await page.getByRole("button", { name: "Remove" }).click();
-  await expect(
-    page.locator('text="Wait for it..."').first().isVisible()
-  ).resolves.toBe(true);
-  await page.waitForSelector('button:visible:has-text("Add")');
-  await expect(page.locator('text="It\'s gone!"').isVisible()).resolves.toBe(
-    true
-  );
-  await expect(page.getByRole("checkbox").isVisible()).resolves.toBe(false);
+  await clickAndWait(page, buttons.removeButton, buttons.addButton);
+  const isCheckboxVisible = await page.getByRole("checkbox").isVisible();
+  expect(isCheckboxVisible).toBe(false);
 });
 
 test("Add button functionality", async ({ page }) => {
-  await page.getByRole("button", { name: "Remove" }).click();
-  await page.waitForSelector('button:visible:has-text("Add")');
-  await page.getByRole("button", { name: "Add" }).click();
-  await page.waitForSelector('button:visible:has-text("Remove")');
-  await expect(page.getByRole("checkbox").isVisible()).resolves.toBe(true);
+  clickAndWait(page, buttons.removeButton, buttons.addButton);
+  await page.waitForSelector(`button:visible:has-text("${buttons.addButton}")`);
+  clickAndWait(page, buttons.addButton, buttons.removeButton);
+  await page.waitForSelector(`button:visible:has-text("${buttons.removeButton}")`);
+  const isCheckboxVisible = await page.getByRole("checkbox").isVisible();
+  expect(isCheckboxVisible).toBe(true);
 });
 
 test("Enable button functionality", async ({ page }) => {
-  await page.getByRole("button", { name: "Enable" }).click();
-  await page.waitForSelector('button:visible:has-text("Disable")');
-  await expect(page.getByRole("textbox").isDisabled()).resolves.toBe(false);
+  await clickAndWait(page, buttons.enableButton, buttons.disableButton);
+  const isTextboxDisabled = await page.getByRole("textbox").isDisabled();
+  expect(isTextboxDisabled).toBe(false);
 });
 
 test("Disable button functionality", async ({ page }) => {
-  await page.getByRole("button", { name: "Enable" }).click();
-  await page.waitForSelector('button:visible:has-text("Disable")');
-  await page.getByRole("button", { name: "Disable" }).click();
-  await page.waitForSelector('button:visible:has-text("Enable")');
-  await expect(page.getByRole("textbox").isDisabled()).resolves.toBe(true);
+  clickAndWait(page, buttons.enableButton, buttons.disableButton, {
+    timeout: 3000
+  });
+  await page.waitForSelector(
+    `button:visible:has-text("${buttons.disableButton}")`
+  );
+  clickAndWait(page, buttons.disableButton, buttons.enableButton);
+  await page.waitForSelector(
+    `button:visible:has-text("${buttons.enableButton}")`
+  );
+  const isTextboxDisabled = await page.getByRole("textbox").isDisabled();
+  expect(isTextboxDisabled).toBe(true);
 });

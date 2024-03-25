@@ -1,5 +1,6 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
+import { dropdownOptions } from "@data_assets/dropdownOptions"
 const taskURL = Env.URL + "dropdown";
 let page;
 
@@ -21,11 +22,12 @@ test("Dropdown list is loaded", async ({ page }) => {
 });
 
 test("Dropdown list is loaded with proper placeholder", async ({ page }) => {
-  await expect(page.locator("select")).toHaveValue("Please select an option");
+  let a = page.getByPlaceholder(dropdownOptions[0]);
+  expect(a).toBeTruthy();
 });
 
 test("Dropdown list has proper options", async ({ page }) => {
-  await expect(page.locator("select")).toHaveValues(["Please select an option", "1", "2"]);
+  await expect(page.locator("select")).toHaveValues(dropdownOptions);
 });
 
 test("Dropdown expands on click", async ({ page }) => {

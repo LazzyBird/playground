@@ -1,7 +1,7 @@
-const { test, expect } = require("@playwright/test");
-
-const taskURL =
-  "https://the-internet.herokuapp.com/shifting_content/image?mode=random&pixel_shift=100";
+import { test, expect } from "@playwright/test";
+import Env from "@helpers/env"
+const taskURL = Env.URL +
+  "shifting_content/image?mode=random&pixel_shift=100";
 let page;
 
 test.beforeAll(async ({ browser }) => {
@@ -18,5 +18,5 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("Image has proper position", async ({ page }) => {
- await expect(page.locator("#content > div")).toHaveScreenshot('img1.png');
+  await expect(page.locator("#content > div")).toHaveScreenshot('img1.png');
 });
