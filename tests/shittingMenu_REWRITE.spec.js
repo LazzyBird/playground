@@ -1,5 +1,6 @@
 // @ts-check
 import { test, expect } from "@playwright/test";
+///! Удолі цей позор й напиши нормально
 const taskURL =
   "https://the-internet.herokuapp.com/shifting_content/menu?mode=random&pixel_shift=200";
 

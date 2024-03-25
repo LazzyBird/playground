@@ -1,7 +1,12 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env"
-const taskURL = Env.URL +
-  "shifting_content/image?mode=random&pixel_shift=100";
+const mainURL = Env.URL +
+  "shifting_content/image";
+const randomShift = mainURL + "?mode=random";
+const ramdomPixels = mainURL + "?pixel_shift=100" // ! якщо можна задати зсув у запиті, чому б не додати рандомайзер й функцію для перевірки чи відповідає зсув параметру
+const randomBoth = mainURL + "?mode=random&pixel_shift=100";
+const simpleAppend = mainURL + "?image_type=simple";
+
 let page;
 
 test.beforeAll(async ({ browser }) => {
@@ -16,7 +21,7 @@ test.beforeEach(async ({ page }) => {
   await page.goto(taskURL);
   await page.waitForLoadState("load");
 });
-
+//! все не подобається, аж трясе, тупізм якийсь написала
 test("Image has proper position", async ({ page }) => {
   try {
     const imageElement = page.locator("#content > div");
