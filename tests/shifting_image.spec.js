@@ -18,5 +18,16 @@ test.beforeEach(async ({ page }) => {
 });
 
 test("Image has proper position", async ({ page }) => {
-  await expect(page.locator("#content > div")).toHaveScreenshot('img1.png');
+  try {
+    const imageElement = page.locator("#content > div");
+    if (!imageElement) {
+      throw new Error("Image element not found");
+    }
+    await expect(imageElement).toHaveScreenshot({
+      path: './screenshots/shifting_image.spec.js-snapshots/img1.png'
+    });
+  } catch (error) {
+    console.error(error);
+    throw error;
+  }
 });

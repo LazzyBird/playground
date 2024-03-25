@@ -1,4 +1,4 @@
-const { test, expect } = require("@playwright/test");
+import { test, expect } from "@playwright/test";
 
 const taskURL =
   "https://the-internet.herokuapp.com/shifting_content/menu?mode=random&pixel_shift=200";
