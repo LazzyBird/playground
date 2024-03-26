@@ -54,7 +54,7 @@ test.describe("Table tests", () => {
 test.describe("Button tests", () => {
   test("Clicking on 1st button changes #canvas", async ({ page }) => {
     let zeroScreen = await screenShoter(page, "#canvas", true); // Save screenshot
-    await page.locator(".button").first().click(); // тут кпнока просто перезавантажує сторінку
+    await page.locator(".button").first().click(); // тут кнопка просто перезавантажує сторінку
     await page.waitForLoadState("load");
     let currentScreen1 = await screenShoter(page, "#canvas", false); // Do not save screenshot
     expect(currentScreen1).not.toEqual(zeroScreen, "The button does not change the canvas");
