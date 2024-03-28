@@ -1,13 +1,15 @@
 import { test, expect } from "@playwright/test";
 import { taskURL } from "@data_assets/shiftingImageURL"
-let page;
+let page, context;
 
 test.beforeAll(async ({ browser }) => {
-  page = await browser.newPage();
+  context = await browser.newContext();
 });
-
+test.beforeEach(async ({ context }) => {
+  page = context.newPage();
+})
 test.afterAll(async () => {
-  await page.close();
+  await context.close();
 });
 
 test("Image has proper position on baseURL (generate referrence images)", async ({ page }) => {
@@ -16,11 +18,13 @@ test("Image has proper position on baseURL (generate referrence images)", async 
 });
 test("Image has proper position on random pixels shift", async ({ page }) => {
   await page.goto(taskURL.ramdomPixels);
-  await page.waitForLoadState('load');
   await expect(page).toHaveScreenshot(`correctPage.png`);
 });
 test("Image has proper position on randomBoth", async ({ page }) => {
   await page.goto(taskURL.randomBoth);
-  await page.waitForLoadState('load');
   await expect(page).toHaveScreenshot(`correctPage.png`);
 });
+test("grey avatar is on its place", async ({ page }) => {
+  await page.goto(taskURL.simpleAppend);
+  await expect(page).toHaveScreenshot(`greyAvatar.png`);
+ })

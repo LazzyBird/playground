@@ -1,15 +1,9 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
+import { getDescriptions, getVisibilityArray } from "@datafactory/dynamicContent";
 const taskURL = Env.URL + "dynamic_content";
 // const partiallyStaticContentURL = taskURL + "?with_content=static";
 let page;
-async function getDescriptions(page) {
-  // Use page.$$ to query for elements and get a NodeList
-  const descriptions = await page.$$("div.large-10.columns");
-  descriptions.shift(); //removing parent div
-  return descriptions;
-};
-
 test.beforeAll("get the page object", async ({ browser }) => {
   page = await browser.newPage();
 });
@@ -26,22 +20,14 @@ test(`avatars are visible`, async ({ page }) => {
 // ALL ABOVE IS WORKING DO NOT TOUCH!!!!!!!
 test(`descriptions are visible`, async ({ page }) => {
   const descriptions = await getDescriptions(page);
-  // Check the visibility of each element
-  const visibilityArray = await Promise.all(
-    descriptions.map(async (element) => {
-      const isVisible = await element.isVisible();
-      return isVisible;
-    })
-  );
+  const visibilityArray = await getVisibilityArray(descriptions);
   visibilityArray.forEach((isVisible, index) => {
     expect(isVisible).toBe(true, `Element at index ${index} is not visible`);
   });
 });
 
 test(`descriptions are strings`, async ({ page }) => {
-    // Convert the NodeList to an array using Array.from()
   const descriptionsArray = Array.from(getDescriptions(page));
-  // Use Promise.all to wait for all promises to be fulfilled
   const lengthsArrayPromises = descriptionsArray.map(async (desc) => {
     const length = await desc.textContent();
     return length;
@@ -57,8 +43,8 @@ test(`descriptions are strings`, async ({ page }) => {
     // Assertion 2: Check if each item has a length greater than 0
     expect(item.length).toBeGreaterThan(
       0,
-      `Item at index ${index} has length 0 or less`
+      `Item at index ${index} has length 0`
     );
   });
-  }
-  );
+}
+);

@@ -10,5 +10,5 @@
       "@data_assets/*": ["lib/data_assets/*"]
     }
   },
-  "include": ["tests/**/*", "lib/datafactory/challengingDOM_helperDataGen.js", "lib/fixtures/myTest.js"]
+  "include": ["tests/**/*", "lib/datafactory/challengingDOM_helperDataGen.js", "lib/fixtures/myTest.js", "lib/datafactory/dynamicContent.js"]
 }
