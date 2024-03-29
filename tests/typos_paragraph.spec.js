@@ -12,10 +12,10 @@ test(`typo counter`, async ({ page }) => {
     const text = await page.getByText('Sometimes').innerText();
     if (text !== expectedText) {
       typoCount++;
-      console.log(text)
     }
   }
   console.log(`Number of typo appearances: ${typoCount} from ${maxAttempts} attempts`);
+  expect(typoCount).toEqual(0);
 })
 /*
 test("Typo check", async ({ page }) => {
