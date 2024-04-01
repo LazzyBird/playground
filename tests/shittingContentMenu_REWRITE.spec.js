@@ -9,8 +9,18 @@ const randomTaskURL = Env.URL +
 const shiftTaskURL = Env.URL + "?" + shiftSuffix;
 const randomAndShiftTaskURL = randomTaskURL + "&" + shiftSuffix;
 
-
-
+test("Random mode menu items", async ({ page }) => {
+  await page.goto(randomTaskURL);
+//? дописати
+});
+test("Shift mode menu items", async ({ page }) => {
+  await page.goto(shiftTaskURL);
+  //? дописати
+});
+test("Both modes menu items", async ({ page }) => {
+  await page.goto(randomAndShiftTaskURL);
+  //? дописати
+ })
 test.describe("Every menu item is according to layout ", () => {
   test("Home menu item is according to layout ", async ({ page }) => {
     await expect(page.getByText("Home")).toHaveScreenshot();
