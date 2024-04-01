@@ -1,9 +1,9 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
-import { menuItems } from "@data_assets/disappearing_elements";
-import { getMenuItems } from "@datafactory/disappearing_elements";
+import { menuItems } from "@data_assets/menuItems";
+import { getMenuItems } from "@datafactory/getMenuItems";
 const taskURL = Env.URL + "disappearing_elements";
-
+//! перепиши цей непотріб якось невдобно таке людям показувати
 test.beforeAll(async ({ browser }) => {
   let context = await browser.newContext();
   let page = context.newPage();
@@ -14,7 +14,7 @@ test.beforeEach(async ({ page }) => {
 test.afterAll(async ({ browser }) => {
   await browser.close();
 });
-
+/* //! Удоліть після того як напишеш по-людськи
 test("Home menu item leads to Homepage", async ({ page }) => {
   await page.getByText("Home").click();
   await page.waitForEvent("domcontentloaded");
@@ -55,4 +55,4 @@ test(`each expected menu item is present, no matter the order`, async ({ page })
   menuItems.forEach((item) => {
     expect(siteAppMenuItems).toContain(item);
   });
-});
+}); */

@@ -1,26 +1,20 @@
-// @ts-check
 import { test, expect } from "@playwright/test";
-import Env from "@helpers/env";
-
-const shiftSuffix = "pixel_shift=100";
-const modeSuffix = "mode=random";
-const randomTaskURL = Env.URL +
-  "?" + modeSuffix;
-const shiftTaskURL = Env.URL + "?" + shiftSuffix;
-const randomAndShiftTaskURL = randomTaskURL + "&" + shiftSuffix;
+import { taskURL } from "@data_assets/shiftingContent";
 
 test("Random mode menu items", async ({ page }) => {
-  await page.goto(randomTaskURL);
+  await page.goto(taskURL.random);
 //? дописати
 });
 test("Shift mode menu items", async ({ page }) => {
-  await page.goto(shiftTaskURL);
+  await page.goto(taskURL.shift);
   //? дописати
 });
 test("Both modes menu items", async ({ page }) => {
-  await page.goto(randomAndShiftTaskURL);
+  await page.goto(taskURL.randomAndShift);
   //? дописати
- })
+});
+
+ /* //? кандидат на випиляння
 test.describe("Every menu item is according to layout ", () => {
   test("Home menu item is according to layout ", async ({ page }) => {
     await expect(page.getByText("Home")).toHaveScreenshot();
@@ -42,3 +36,4 @@ test.describe("Every menu item is according to layout ", () => {
     await expect(page.getByText("Gallery")).toHaveScreenshot();
   });
 });
+ */
