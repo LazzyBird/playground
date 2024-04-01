@@ -1,12 +1,15 @@
 // @ts-check
 import { test, expect } from "@playwright/test";
-///! Удолі цей позор й напиши нормально
-const taskURL =
-  "https://the-internet.herokuapp.com/shifting_content/menu?mode=random&pixel_shift=200";
+import Env from "@helpers/env";
 
-test.beforeEach(async ({ page }) => {
-  await page.goto(taskURL);
-});
+const shiftSuffix = "pixel_shift=100";
+const modeSuffix = "mode=random";
+const randomTaskURL = Env.URL +
+  "?" + modeSuffix;
+const shiftTaskURL = Env.URL + "?" + shiftSuffix;
+const randomAndShiftTaskURL = randomTaskURL + "&" + shiftSuffix;
+
+
 
 test.describe("Every menu item is according to layout ", () => {
   test("Home menu item is according to layout ", async ({ page }) => {

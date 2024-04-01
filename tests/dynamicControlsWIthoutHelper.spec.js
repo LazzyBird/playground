@@ -1,18 +1,9 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env"
 import { buttons, texts } from "@data_assets/dynamicControls"
-// import { clickAndWait } from "@datafactory/dynamicConstrols"
 const taskURL = Env.URL + "dynamic_controls"; let page;
 
-test.beforeAll("get the page object", async ({ browser }) => {
-  page = await browser.newPage();
-});
-
-test.afterAll(async () => {
-  await page.close();
-});
-
-test.beforeEach("Open Dynamic Controls URL", async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   await page.goto(taskURL);
 });
 
@@ -29,9 +20,9 @@ test("Remove button functionality", async ({ page }) => {
 });
 
 test("Add button functionality", async ({ page }) => {
-  await page.getByRole("button", { name: "Remove" }).click();
+  await page.getByRole("button", `${buttons.removeButton}`).click();
   await page.waitForSelector('button:visible:has-text("Add")');
-  await page.getByRole("button", { name: "Add" }).click();
+  await page.getByRole("button", { name: `${buttons.addButton}` }).click();
   await page.waitForSelector('button:visible:has-text("Remove")');
   await expect(page.getByRole("checkbox").isVisible()).resolves.toBe(true);
 });

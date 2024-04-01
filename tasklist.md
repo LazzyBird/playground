@@ -40,5 +40,5 @@ Shifting Content
 Slow Resources
 Sortable Data Tables
 Status Codes +
-Typos +-
+Typos + reports
 WYSIWYG Editor
