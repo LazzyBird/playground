@@ -1,12 +1,13 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
 import { menuItems } from "@data_assets/menuItems";
-import { getMenuItems } from "@datafactory/getMenuItems";
+import { getTextFromLocator } from "@datafactory/getMenuItems";
 const taskURL = Env.URL + "disappearing_elements";
+let page;
 //! перепиши цей непотріб якось невдобно таке людям показувати
 test.beforeAll(async ({ browser }) => {
   let context = await browser.newContext();
-  let page = context.newPage();
+  page = context.newPage();
 });
 test.beforeEach(async ({ page }) => {
   await page.goto(taskURL);
@@ -14,7 +15,12 @@ test.beforeEach(async ({ page }) => {
 test.afterAll(async ({ browser }) => {
   await browser.close();
 });
-/* //! Удоліть після того як напишеш по-людськи
+test("all menu items are visible", async ({ page }) => {
+  const a = await getTextFromLocator(page, 'li');
+  console.info(a);
+  expect(a).toEqual(menuItems);
+});
+/* //! Удолі  після того як напишеш по-людськи
 test("Home menu item leads to Homepage", async ({ page }) => {
   await page.getByText("Home").click();
   await page.waitForEvent("domcontentloaded");
