@@ -2,13 +2,30 @@
   "compilerOptions": {
     "baseUrl": ".",
     "esModuleInterop": true,
-    "types": ["jest"],
+    "types": [
+      "jest"
+    ],
     "paths": {
-      "@datafactory/*": ["lib/datafactory/*"],
-      "@helpers/*": ["lib/helpers/*"],
-      "@fixtures/*": ["lib/fixtures/*"],
-      "@data_assets/*": ["lib/data_assets/*"]
+      "@datafactory/*": [
+        "lib/datafactory/*"
+      ],
+      "@helpers/*": [
+        "lib/helpers/*"
+      ],
+      "@fixtures/*": [
+        "lib/fixtures/*"
+      ],
+      "@data_assets/*": [
+        "lib/data_assets/*"
+      ]
     }
   },
-  "include": ["tests/**/*", "lib/datafactory/challengingDOM_helperDataGen.js", "lib/fixtures/myTest.js", "lib/datafactory/dynamicContent.js"]
+  "include": [
+    "tests/**/*",
+    "lib/fixtures/myTest.js"
+  ],
+  "exclude": [
+    "node_modules",
+    "**/node_modules/*"
+  ]
 }
