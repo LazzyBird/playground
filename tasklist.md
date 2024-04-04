@@ -36,7 +36,7 @@ Notification Messages
 Redirect Link
 Secure File Download
 Shadow DOM
-Shifting Content
+Shifting Content + (except list)
 Slow Resources
 Sortable Data Tables
 Status Codes +

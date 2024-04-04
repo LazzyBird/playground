@@ -5,7 +5,7 @@ import { clickAndWait } from "@datafactory/dynamicConstrols"
 const taskURL = Env.URL + "dynamic_controls";
 let page;
 
-test.beforeAll("get the page object", async ({ browser }) => {
+test.beforeAll(async ({ browser }) => {
   page = await browser.newPage();
 });
 
@@ -13,7 +13,7 @@ test.afterAll(async () => {
   await page.close();
 });
 
-test.beforeEach("Open Dynamic Controls URL", async ({ page }) => {
+test.beforeEach(async ({ page }) => {
   await page.goto(taskURL);
 });
 

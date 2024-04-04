@@ -3,8 +3,7 @@ import { taskURL } from "@data_assets/shiftingContent";
 import { menuItems } from "@data_assets/menuItems";
 let page;
 test.beforeAll(async ({ browser }) => {
-  let context = await browser.newContext();
-  page = context.newPage();
+  page = await browser.newPage();
 });
 test.beforeEach(async ({ page }) => {
   await page.goto(taskURL.randomAndShift);
@@ -33,3 +32,6 @@ test.describe("Every menu item is according to layout ", () => {
     await expect(page.getByText(menuItems[4])).toHaveScreenshot();
   });
 });
+test("all menu is ok", async ({ page }) => {
+  await expect(page).toHaveScreenshot();
+})

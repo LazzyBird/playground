@@ -48,6 +48,7 @@ test-results/
 playwright-report/
 screenshots/
 *.png
+*.jpeg
 # Snowpack dependency directory (https://snowpack.dev/)
 web_modules/
 
