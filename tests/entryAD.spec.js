@@ -13,8 +13,9 @@ test.beforeEach(async ({ page }) => {
 //? бере довжину текстового контенту як маркер наявності кода модала у тілі сторінки та перевіряє по атрибутам div'а з модалом - розмір та видимість - без скріншоту (не вимагає робити скріншот та робить незалежний лог)
 //! прогнати який з них швидше працює на великій кількості повторів
 // npx playwright test -g "Modal does not appear after closing without reset" --repeat-each=20
-//? не така вона вже й сурстрьомна, як тільки вилучити дані про розмір модала
+
 const modalProperties = async (page) => {
+    //вердикт - нормальна така функція, все там в тому boundingBox об'єкті є й норм пишеться в лог
     const modal = await page.locator('#modal');
     const box = await modal.boundingBox();
     console.log(box);
