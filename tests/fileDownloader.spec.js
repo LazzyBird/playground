@@ -47,8 +47,8 @@ test('fetch II approach', async ({ page }) => {
         if (response.ok) {
             counter++;
         } else {
-            const corruptedFile = { URL: `${url}`, "response status text": `${response.statusText}`, "response status code": `${response.status}`, date: `${new Date()}` };
-        await appendReport([corruptedFile], grabDownloadLinks);
+            const corruptedFile = { "response status text": `${response.statusText}`, "response status code": `${response.status}`, date: `${new Date()}`, URL: `${url}` };
+            await appendReport([corruptedFile], grabDownloadLinks);
         }
     };
     expect(counter).toBe(links.links.length);
