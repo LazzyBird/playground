@@ -36,7 +36,23 @@ test('fetch approach', async ({ page }) => {
             throw new Error(error);
         }
     }
-})
+});
+test('fetch II approach', async ({ page }) => {
+    await page.goto(taskURL);
+    const links = await grabDownloadLinks(page);
+    let counter = 0;
+    for (const link of links.links) {
+        const url = Env.URL + link;
+        const response = await fetch(url);
+        if (response.ok) {
+            counter++;
+        } else {
+            const corruptedFile = { URL: `${url}`, "response status text": `${response.statusText}`, "response status code": `${response.status}`, date: `${new Date()}` };
+        await appendReport([corruptedFile], grabDownloadLinks);
+        }
+    };
+    expect(counter).toBe(links.links.length);
+});
 const grabDownloadLinks = async (page) => {
     let links = [];
     let fileNames = [];
