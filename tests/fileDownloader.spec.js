@@ -1,6 +1,6 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
-import { appendReport } from "@helpers/reportHelper"
+import { brokenLinkCounter } from "@datafactory/fileDownload";
 const loc = '#content > div > a';
 const taskURL = Env.URL + "download";
 
@@ -17,64 +17,9 @@ test('stupid link clicks approach', async ({ page }) => {
     }
 
 });
-test('fetch approach', async ({ page }) => {
-    await page.goto(taskURL);
-    const data = await grabDownloadLinks(page);
-    let index = data.fileNames.length;
-    while (index--) {
-        const response = await fetch(Env.URL + data.links[index]);
-        try {
-            if (response.ok) {
-                continue;
-            } else {
-                const date = new Date();
-                const corruptedFile = { URL: `${Env.URL}+ ${data.links[index]}`, "response status text": `${response.statusText}`, "response status code": `${response.status}`, date: `${date}` };
-                appendReport(corruptedFile, grabDownloadLinks);
-            }
-        }
-        catch (error) {
-            throw new Error(error);
-        }
-    }
-});
 test('fetch II approach', async ({ page }) => {
     await page.goto(taskURL);
-    const links = await grabDownloadLinks(page);
-    let counter = 0;
-    for (const link of links.links) {
-        const url = Env.URL + link;
-        const response = await fetch(url);
-        if (response.ok) {
-            counter++;
-        } else {
-            const corruptedFile = { "response status text": `${response.statusText}`, "response status code": `${response.status}`, date: `${new Date()}`, URL: `${url}` };
-            await appendReport([corruptedFile], grabDownloadLinks);
-        }
-    };
-    expect(counter).toBe(links.links.length);
+    const result = await brokenLinkCounter(page, loc);
+    expect(result.counter).toBe(result.counterTotal);
 });
-const grabDownloadLinks = async (page) => {
-    let links = [];
-    let fileNames = [];
-
-    const allLinks = await page.locator(`${loc}`).all();
-
-    for (const link of allLinks) {
-        const href = await link.getAttribute("href");
-
-        if (href) {
-            const fileName = href.split('/').pop();
-
-            if (fileName) {
-                links.push(href);
-                fileNames.push(fileName);
-            } else {
-                console.error(`Invalid href or fileName: ${href}`);
-            }
-        } else {
-            console.error(`No href attribute for link`);
-        }
-    };
-
-    return { links, fileNames };
-}
+//TODO все ніби то ок але лог пишеться якогось біса в один рядок, хоча .join('\n') використовується в функції форматування даних
