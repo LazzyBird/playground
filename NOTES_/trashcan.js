@@ -52,3 +52,9 @@ test("Typo check", async ({ page }) => {
   
     await retryCheckTypo(); // Почати перевірку та повторювати в разі неуспішності
 }); */
+
+//* бере масив й катає його у файл з датою у імені
+/*
+   import * as fs from "fs";
+   const d = new Date().toDateString();
+   fs.writeFileSync(`./lib/data_assets/dowloadLinks${d}.json`, JSON.stringify(links)); */
