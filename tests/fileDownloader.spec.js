@@ -1,9 +1,10 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
+import { appendReport } from "@helpers/reportHelper"
 const loc = '#content > div > a';
 const taskURL = Env.URL + "download";
 
-//! список файліа кожен раз інший🧐
+//! список файлів кожен раз інший🧐
 test('stupid link clicks approach', async ({ page }) => {
     await page.goto(taskURL);
     const data = await grabDownloadLinks(page);
@@ -16,13 +17,24 @@ test('stupid link clicks approach', async ({ page }) => {
     }
 
 });
-test('fetch approach', async ({ page }) => { 
+test('fetch approach', async ({ page }) => {
     await page.goto(taskURL);
     const data = await grabDownloadLinks(page);
     let index = data.fileNames.length;
     while (index--) {
         const response = await fetch(Env.URL + data.links[index]);
-        expect(response.ok).toEqual(true);
+        try {
+            if (response.ok) {
+                continue;
+            } else {
+                const date = new Date();
+                const corruptedFile = { URL: `${Env.URL}+ ${data.links[index]}`, "response status text": `${response.statusText}`, "response status code": `${response.status}`, date: `${date}` };
+                appendReport(corruptedFile, grabDownloadLinks);
+            }
+        }
+        catch (error) {
+            throw new Error(error);
+        }
     }
 })
 const grabDownloadLinks = async (page) => {
