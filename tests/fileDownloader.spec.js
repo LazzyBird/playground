@@ -7,7 +7,7 @@ const taskURL = Env.URL + "download";
 //! список файлів кожен раз інший🧐
 test('stupid link clicks approach', async ({ page }) => {
     await page.goto(taskURL);
-    const data = await grabDownloadLinks(page);
+    const data = await brokenLinkCounter(page, loc);
     let index = data.fileNames.length;
     while (index--) {
         const downloadPromise = page.waitForEvent('download');
@@ -17,7 +17,7 @@ test('stupid link clicks approach', async ({ page }) => {
     }
 
 });
-test('fetch II approach', async ({ page }) => {
+test('fetch approach', async ({ page }) => {
     await page.goto(taskURL);
     const result = await brokenLinkCounter(page, loc);
     expect(result.counter).toBe(result.counterTotal);
