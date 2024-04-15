@@ -4,7 +4,6 @@ import { brokenLinkCounter } from "@datafactory/fileDownload";
 const loc = '#content > div > a';
 const taskURL = Env.URL + "download";
 
-//! список файлів кожен раз інший🧐
 test('stupid link clicks approach', async ({ page }) => {
     await page.goto(taskURL);
     const data = await brokenLinkCounter(page, loc);
@@ -17,9 +16,9 @@ test('stupid link clicks approach', async ({ page }) => {
     }
 
 });
+//TODO все ніби то ок але лог пишеться якогось біса в один рядок, хоча .join('\n') використовується в функції форматування даних
 test('fetch approach', async ({ page }) => {
     await page.goto(taskURL);
     const result = await brokenLinkCounter(page, loc);
     expect(result.counter).toBe(result.counterTotal);
 });
-//TODO все ніби то ок але лог пишеться якогось біса в один рядок, хоча .join('\n') використовується в функції форматування даних
