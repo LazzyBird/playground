@@ -9,6 +9,7 @@ test.beforeEach(async ({ page }) => {
     await page.goto(Env.URL + "forgot_password");
 });
 //? незрозуміло що тут перевіряти бо сервер все одно повертає 500 на будь-що
+//TODO а ось не факт, можна поганяти на багато повторів, може віддати будь-яку відповідь, це ж спеціальний сайт відбірного лайна
 test("fill forgot password form", async ({ page }) => {
     await page.locator('#email').fill(email);
     await page.getByRole('button', { name: 'Retrieve password' }).click();
