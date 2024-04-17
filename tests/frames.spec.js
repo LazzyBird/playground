@@ -17,18 +17,14 @@ test('Nested Frames all 4 are visible by screenshot', async ({ page }) => {
     await page.waitForLoadState();
     await expect(page).toHaveScreenshot();
 });
-test('left frame content by its url', async ({ page }) => {
-    await page.goto(`https://the-internet.herokuapp.com/frame_left`);
-    await page.waitForLoadState();
-    expect(page.locator('body')).toHaveText(nestedFrames.leftFrame);
-});
-test('frame by frameLocator', async ({ page }) => {
+//TODO працює та коректно повертає текст з фрейма, можна винести у функцію але наразі влом
+test('frame by its urls', async ({ page }) => {
     for (const key of f_url) {
         await page.goto(Env.URL + key);
         await page.waitForLoadState();
-        const text = await page.locator('body').innerText();
+        //const text = await page.locator('body').innerText();
         await expect(page.locator('body')).toHaveText(nestedFrames[`${key}`]);
-        console.log(text);
+       // console.log(text);
     }
 });
 //? порівняти з скріншотом? чи треба перевіряти функціонал? там є ще перевірка такого редактора
