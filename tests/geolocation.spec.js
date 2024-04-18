@@ -2,9 +2,13 @@ import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
 
 import Chance from "chance";
-import { link } from "node:fs";
 const chance = new Chance();
 
+const testTexts = {
+    link: "geolocation",
+    getLocation: 'Where am I?',
+    confirmation: 'See in on Google'
+}
 
 test.use({
     geolocation: {
@@ -17,8 +21,8 @@ test.use({
 
 test("Geolocation", async ({ page }) => {
     await page.goto(Env.URL + "geolocation");
-    await page.getByText('Where am I?').click();
+    await page.getByText(testTexts.getLocation).click();
     await expect(page.locator("body")).toContainText('Longitude');
     await expect(page.locator("body")).toContainText('Latitude');
-    expect(page.getByText('See it on Google')).toBeVisible()
+    expect(page.getByText(testTexts.confirmation)).toBeVisible()
 });
