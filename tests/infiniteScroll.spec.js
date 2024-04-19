@@ -31,7 +31,7 @@ test('With End button', async ({ page }) => {
         i--;
     };
     console.log('Total screen scrolls: ', pCount, ' from ', n, ' End button presses, start n of added content units: ', pCountStart);
-    // expect(pCount).toBeLessThanOrEqual(n);
+    expect(pCount).toBeLessThanOrEqual(n);
     expect(pCount).toBeGreaterThan(n / 2);
 });
 
