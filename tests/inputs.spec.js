@@ -1,18 +1,24 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
 import { randomUpDownKeys } from "@monkeys/inputClicker"
+import { faceToKeyboardString } from "@datafactory/input"
 import Chance from "chance";
-import exp from "constants";
 const chance = new Chance;
+
 //* це поле приймає цифри, -, e/E, але чомусь у абсолютно рандомному порядку - може прийняти 65465156498--6165120235498Ee654987097 я хз чи так воно повинно бути взагали.
+
 test.beforeEach(async ({ page }) => {
     await page.goto(Env.URL + 'inputs')
 });
+
 test('input field has type number', async ({ page }) => {
+    //* цей тест провалюється тількі по таймауту завантаження, на повторних спробах все ок
     const a = await page.locator('input').getAttribute('type');
     expect(a).toBe('number');
 });
+
 test.describe('fill form with different inputs', async () => {
+    //? може одразу фігачити рандомним рядком, чи обидва потрібні для покриття?
     test('fill with random integer - input equality', async ({ page }) => {
         const a = chance.integer();
         await page.locator('input').fill(a.toString());
@@ -25,7 +31,11 @@ test.describe('fill form with different inputs', async () => {
         const b = await page.locator('input').inputValue();
         expect(parseFloat(b)).toEqual(a);
     });
-    test('fill with letters', async ({ page }) => {
+    //! https://bugzilla.mozilla.org/show_bug.cgi?id=1398528 ось класний же кейс але виявилося що це мозілін баг
+    // як виявилося, макбучік з разостанньою макосью теж це має
+    //також він дає ложнопозитивні результати для хрома - значення у полі є, воно правильне, але PW якогось біса отримує порожнє поле як expected коли воно насправді не порожнє
+    //TODO - якщо сильно нема чого буде робити, можна покопатися якого дідька воно повертає порожній рядок
+    test('fill with random string', async ({ page }) => {
         const a = faceToKeyboardString(30);
         await page.locator('input').pressSequentially(a.face);
         const b = await page.locator('input').inputValue();
@@ -42,33 +52,3 @@ test.describe('change with arrow buttons', async () => {
         expect(parseInt(actualResult)).toEqual(expectedResult);
     })
 });
-function faceToKeyboardString(maxLength) {
-    const face = chance.string({ alpha: true, symbols: true, numeric: true, length: chance.natural({ min: 10, max: maxLength }) });
-    const cleanedInput = cleanString(face);
-    return { face, cleanedInput };
-}
-function cleanString(str) {
-    if (typeof str !== 'string') {
-        throw new TypeError('Input must be a string');
-    }
-
-    let result = '';
-    let minus = false;
-    let exp = false;
-
-    for (let i = 0; i < str.length; i++) {
-        const char = str.charAt(i);
-
-        if (char === '-' && !minus && (i === 0 || (i > 0 && (str.charAt(i - 1) !== 'e' && str.charAt(i - 1) !== 'E')))) {
-            result += '-';
-            minus = true;
-        } else if ((char === 'E' || char === 'e') && !exp && (i === 0 || (i > 0 && str.charAt(i - 1) !== '-'))) {
-            result += 'E';
-            exp = true;
-        } else if (/[0-9]/.test(char)) {
-            result += char;
-        }
-    }
-
-    return result;
-}
