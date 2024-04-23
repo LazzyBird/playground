@@ -5,14 +5,13 @@ import { faceToKeyboardString } from "@datafactory/input"
 import Chance from "chance";
 const chance = new Chance;
 
-//* це поле приймає цифри, -, e/E, але чомусь у абсолютно рандомному порядку - може прийняти 65465156498--6165120235498Ee654987097 я хз чи так воно повинно бути взагали.
-
 test.beforeEach(async ({ page }) => {
-    await page.goto(Env.URL + 'inputs')
+    await page.goto(Env.URL + 'inputs');
+    await page.waitForLoadState('load');
 });
 
 test('input field has type number', async ({ page }) => {
-    //* цей тест провалюється тількі по таймауту завантаження, на повторних спробах все ок
+    //? цей тест провалюється тількі по таймауту завантаження, на повторних спробах все ок
     const a = await page.locator('input').getAttribute('type');
     expect(a).toBe('number');
 });
