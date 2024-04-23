@@ -17,6 +17,9 @@
       ],
       "@data_assets/*": [
         "lib/data_assets/*"
+      ],
+      "@monkeys/*": [
+        "lib/monkeys/*"
       ]
     }
   },
