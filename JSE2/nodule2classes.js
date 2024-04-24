@@ -262,5 +262,10 @@ let longitude = initialData.longitude;
   console.log(almostEmptyObject instanceof String); // -> false
   let str = new String("test me");
   console.log(str instanceof String); // -> true
-
+  console.log(almostEmptyObject instanceof Object); // -> true
+  // це тому що всі об'єкти що створені на базі класу також імпліцитно створені з Object класу
+  {
+    let obj = new Object();
+    console.log(Object.keys) // -> function keys() {[native code]}
+  }
 }
