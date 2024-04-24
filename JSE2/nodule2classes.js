@@ -243,7 +243,19 @@ let longitude = initialData.longitude;
     };
     let almostEmptyObject = new AlmostEmptyClass(120); // 120
     almostEmptyObject.sayHi(); // -> Hi!
+    console.log(almostEmptyObject.constructor.name); // -> "AlmostEmptyClass"
   }
 }
 //+ JSE 2.1.3 The instance of operator
-
+// продовження від 24-04-2024
+{ // завдання переписати попередніц клас як конструктор
+  function AlmostEmpty() {
+    this.nothing = null;
+    this.logger = function (aargh) {
+      console.log(aargh);
+    }
+  }
+  const wow = new AlmostEmpty();
+  wow.logger("wow"); // -> wow
+  console.log(wow.constructor.name) // -> "AlmostEmpty"
+}
