@@ -248,7 +248,7 @@ let longitude = initialData.longitude;
 }
 //+ JSE 2.1.3 The instance of operator
 // продовження від 24-04-2024
-{ // завдання переписати попередніц клас як конструктор
+{ // завдання переписати попередній клас як конструктор
   function AlmostEmpty() {
     this.nothing = null;
     this.logger = function (aargh) {
@@ -258,4 +258,9 @@ let longitude = initialData.longitude;
   const wow = new AlmostEmpty();
   wow.logger("wow"); // -> wow
   console.log(wow.constructor.name) // -> "AlmostEmpty"
+  console.log(almostEmptyObject instanceof AlmostEmptyClass); // -> true
+  console.log(almostEmptyObject instanceof String); // -> false
+  let str = new String("test me");
+  console.log(str instanceof String); // -> true
+
 }
