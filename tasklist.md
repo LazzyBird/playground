@@ -12,20 +12,20 @@ Dropdown +
 Dynamic Content +
 Dynamic Controls +
 Dynamic Loading
-Entry Ad
-Exit Intent
-File Download
-File Upload
+Entry Ad +
+Exit Intent +
+File Download +
+File Upload - незрозуміло як окрім через буфер робити завантаження drag&drop
 Floating Menu
-Forgot Password
-Form Authentication
-Frames
-Geolocation
-Horizontal Slider
-Hovers
-Infinite Scroll
-Inputs
-JQuery UI Menus
+Forgot Password +
+Form Authentication +
+Frames +
+Geolocation +
+Horizontal Slider +
+Hovers +
+Infinite Scroll +
+Inputs +
+JQuery UI Menus +
 JavaScript Alerts
 JavaScript onload event error
 Key Presses
