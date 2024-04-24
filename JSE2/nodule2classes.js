@@ -29,6 +29,21 @@
     this.setPosition(latitude, longitude);
   };
 }
+// або у вигляді декларації класу:
+{
+  class Vehicle {
+    constructor(id, latitude, longitude) {
+      this.setPosition = function (latitude, longitude) {
+        this.time = Date.now();
+        this.longitude = longitude;
+        this.latitude = latitude;
+      };
+      this.id = id;
+      this.status = "unavailable";
+      this.setPosition(latitude, longitude);
+    }
+  }
+}
 //what if we don't want to depend on the order of the fields?
 {
   let Vehicle = function (initialData) {
@@ -61,7 +76,7 @@ let longitude = initialData.longitude;
     id: "AL1024"
   });
 }
-// some new iterations of code
+// some new iterations of code - getting rid of redundant use of usage initialData object
 {
   let Vehicle = function ({ id, latitude, longitude }) {
     this.setPosition = function ({ latitude, longitude }) {
@@ -106,7 +121,7 @@ let longitude = initialData.longitude;
 }
 // another example
 {
-  // here is used constructor of class, some inmprovements and expalations in nthe next snippet
+  // here is used constructor of class, some inmprovements and expalations in the next snippet
   class Vehicle {
     constructor({ id, latitude, longitude }) {
       this.setPosition = function ({ latitude, longitude }) {
@@ -164,35 +179,68 @@ let longitude = initialData.longitude;
   });
   vehicle.setPosition({ longitude: 18.193121, latitude: 59.378654 });
   console.log(vehicle.getPosition());
+  //* незважаючи на те що час фіксується в момент використання .setPosition, він ніде не зберігається, так що навіщо це тут - велике питання. можна додати до об'єкта властивість vehicle.time = Date.now() то воно буде фіксувати час створення цього об'єкту, а не час виклику метода .setPosition
 }
+{// спроба пофіксити безглузде використання часу. Конструктор містить інструкцію для створення екземпляру з полем в якому буде збережено час створення цього екземпляру, а також властивість в яку буде збережено час використання методу який встановлює позицію
+  class Vehicle {
+    constructor({ id, latitude, longitude }) {
+      this.id = id;
+      this.status = "unavailable";
+      this.setPosition({ latitude, longitude });
+      this.time = Date.now(); // Зберігає час створення об'єкта
+      this.positionTime = null; // cюди буде зберігатися значення яке повертає метод .setPosition
+    }
 
-// one step back to functions - functions in JS are first class citizens - the ability to store functions in variables
-{//function declared with a name - namedFunction
-  function namedFunction() {
-    console.log("I'm named, I hope ... ");
+    setPosition({ latitude, longitude }) {
+      this.longitude = longitude;
+      this.latitude = latitude;
+      this.positionTime = Date.now(); // Зберігає час встановлення позиції
+    }
+
+    getPosition() {
+      return {
+        latitude: this.latitude,
+        longitude: this.longitude
+      };
+    }
+    //* а тут метод який буде додавати властивість до екземпляру класу після його створення:
+    addProperty({ property, value }) {
+      this[property] = value;
+    }
+  }
+  const car = new Vehicle("123");
+  car.addProperty("color", "red");
+  car.addProperty("VIN", 6546568498)
+  console.log(car.id, car.color, car.VIN, typeof (car.addProperty), typeof (car), typeof (Vehicle)) // -> 123 red 6546568498 function object function
+}
+{// one step back to functions - functions in JS are first class citizens - the ability to store functions in variables
+  {//function declared with a name - namedFunction
+    function namedFunction() {
+      console.log("I'm named, I hope ... ");
     }
     // below the anonnymousFunction variable holds a reference to a function
-  let anonymousFunction = function () {
-    console.log("I'm a bit anonymous ...");
+    let anonymousFunction = function () {
+      console.log("I'm a bit anonymous ...");
     };
     // hehe here is a declaration of a named function, which we assign to the variable notExactlyAnonymousFunction:
-  let notExactlyAnonymousFunction = function anotherNamedFunction() {
-    console.log("I'm confused ...");
-  };
-  namedFunction(); // -> I'm named, I hope ...
-  anonymousFunction(); // -> I'm a bit anonymous ...
-  notExactlyAnonymousFunction(); // -> I'm confused ...F
-}
-// this is true for classes as well - we can declare a named class, as it shown in the previous examples, but also store unnamed ones in a variable
-{// let's declare it using a class expression - decpite being substituted for a variable, it is still a class, not an object
-  let AlmostEmptyClass = class {
-    constructor(sth) {
-      console.log(sth);
-    }
-    sayHi() {
-      console.log("Hi!");
-    }
-  };
-  let almostEmptyObject = new AlmostEmptyClass(120); // 120
-  almostEmptyObject.sayHi(); // -> Hi!
+    let notExactlyAnonymousFunction = function anotherNamedFunction() {
+      console.log("I'm confused ...");
+    };
+    namedFunction(); // -> I'm named, I hope ...
+    anonymousFunction(); // -> I'm a bit anonymous ...
+    notExactlyAnonymousFunction(); // -> I'm confused ...F
+  }
+  // this is true for classes as well - we can declare a named class, as it shown in the previous examples, but also store unnamed ones in a variable
+  {// let's declare it using a class expression - decpite being substituted for a variable, it is still a class, not an object
+    let AlmostEmptyClass = class {
+      constructor(sth) {
+        console.log(sth);
+      }
+      sayHi() {
+        console.log("Hi!");
+      }
+    };
+    let almostEmptyObject = new AlmostEmptyClass(120); // 120
+    almostEmptyObject.sayHi(); // -> Hi!
+  }
 }
