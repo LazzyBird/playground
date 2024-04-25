@@ -6,24 +6,6 @@ const loc = '#result'
 test.beforeEach(async ({ page }) => {
     await page.goto(Env.URL + "javascript_alerts");
 });
-/* 
-const data = {
-    buttons: {
-        alert: "Click for JS ALert",
-        confirm: "Click for JS Confirm",
-        prompt: "CLick for JS Prompt"
-    },
-    dialogText: {
-        alert: "I am a JS Alert",
-        confirm: "I am a JS Confirm",
-        prompt: "I am a JS prompt"
-    },
-    confirmText: {
-        alert: "You successfully clicked an alert",
-        confirm: { ok: "You clicked: Ok", cancel: "You clicked: Cancel" },
-        prompt: "You entered:"
-    }
-}; */
 const data = {
     alert: {
         buttonText: "Click for JS Alert",
@@ -74,7 +56,7 @@ test.describe('Confirm suite', () => {
         await expect(page.locator(loc)).toContainText(a.confirmText.cancel);
     });
 })
-
+//! так як для кожного обробника діалогу, як ok так й cancel, в кожен блок describe треба розмістити обидва, то прийнято рішення залишити як є, щоб не ускладнити все до зарозумілого та нечитабельного коду. Все, амба.
 test.describe('Prompt suite', () => {
     test("Clicking for prompt calls prompt dialog, click ok without fill input field", async ({ page }) => {
         const a = data.prompt;
