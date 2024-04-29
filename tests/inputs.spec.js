@@ -3,7 +3,7 @@ import Env from "@helpers/env";
 import { randomUpDownKeys } from "@monkeys/inputClicker"
 import { faceToKeyboardString } from "@datafactory/input"
 import Chance from "chance";
-// import { screenShoter } from "@datafactory/screenShoter";
+import { screenShoter } from "@datafactory/screenShoter";
 const chance = new Chance;
 
 test.beforeEach(async ({ page }) => {
@@ -18,7 +18,7 @@ test('input field has type number', async ({ page }) => {
 });
 
 test.describe('fill form with different inputs', async () => {
-    //? може одразу фігачити рандомним рядком, чи обидва потрібні для покриття?
+    //оці два взагалі не потрібні, насправді. 
     test('fill with random integer - input equality', async ({ page }) => {
         const a = chance.integer();
         await page.locator('input').fill(a.toString());
@@ -33,10 +33,12 @@ test.describe('fill form with different inputs', async () => {
     });
 });
 //! https://bugzilla.mozilla.org/show_bug.cgi?id=1398528 ось класний же кейс але виявилося що це мозілін баг
-// як виявилося, макбучік з разостанньою макосью теж це має
+// як виявилося, макбучік з разостанньою макосью й сафарі теж це має
 test('fill with random string', { tag: '@onlyChrome' }, async ({ page }) => {
-    let counter = 100, emptyValue = 0, attempts = counter;
-    // const emptyInput = await screenShoter(page, 'input', true);
+    // тут проблема в тому що плейрайт десь у 40% випадків просто не бере значення value з цього локатора, тому що
+    //! текст виводиться не безпосередньо у форму, а у формі shadow root, потім ще два div'a, потім ще один вкладений нод;
+    // тести становяться нестабильними, й я гадки немаю навіщо було городити так складно цю форму, це що реально є такі розробники?
+    let counter = 50, emptyValue = 0, attempts = counter;
     const locator = page.locator('input');
     while (counter) {
         const a = faceToKeyboardString(50);
@@ -45,40 +47,25 @@ test('fill with random string', { tag: '@onlyChrome' }, async ({ page }) => {
         if (b === '') {
             emptyValue++;
         }
-        /* const inputValue = await page.evaluate(() => {
-            return document.querySelector('input').value;
-        }); */
-        // console.log(b);
-        /*  if (b === '') {
-             const inputVisualCheck = await screenShoter(page, 'input', false);
-             await expect(inputVisualCheck).not.toEqual(emptyInput);
-         }else{
-             await expect(b).toEqual(a.cleanedInput);
-         }*/
         await locator.clear();
         counter--;
-    }
-    console.log(emptyValue / attempts);
-    // expect(inputValue).toEqual(a.cleanedInput);
-    /* const b = await page.locator('input').inputValue();
-     expect(b).toEqual(a.cleanedInput);
-    await expect(locator).toHaveValue(a.cleanedInput)*/
-    /* const inputValueHandle = await page.evaluateHandle(() => {
-        const element = document.querySelector('#editing-view-port > div');
-        return element?.childNodes[0]?.data; // Отримання значення атрибуту data з першого childNode
-    });
-    const inputValue = await inputValueHandle.jsonValue(); // Отримання значення з об'єкту-вказівника у форматі JSON
-
-    console.log(inputValue); */
-    // expect(b).toEqual(a.cleanedInput);
+    };
+    const falseFailrate = (emptyValue / attempts) * 100;
+    console.log(falseFailrate);
 });
-//! текст виводиться не безпосередньо у форму, а у формі shadow root, потім ще два div'a, потім ще один вкладений нод});
-
-test.describe('change with arrow buttons', async () => {
-    test('up and down arrow buttons', async ({ page }) => {
-        const expectedResult = await randomUpDownKeys(page, 'input', 700, 'ArrowUp', 'ArrowDown');
-        const actualResult = await page.locator('input').inputValue();
-        console.log(`Expected result: ${expectedResult}\nActual result: ${actualResult}`);
-        expect(parseInt(actualResult)).toEqual(expectedResult);
-    })
-});
+test('with screenshot', async ({ page }) => {
+    //+ показує що щось в те поле було отримано й вигляд після не такий як до введення
+    //! не перевіряє як форма обробляє введення, просто констатує що туди щось потрапило
+    //* але 100%
+    const emptyInput = await screenShoter(page, 'input', false);
+    const a = faceToKeyboardString(50);
+    await page.locator('input').pressSequentially(a.face);
+    const filledInput = await screenShoter(page, 'input', false);
+    expect(filledInput).not.toEqual(emptyInput);
+})
+test('up and down arrow buttons', async ({ page }) => {
+    const expectedResult = await randomUpDownKeys(page, 'input', 700, 'ArrowUp', 'ArrowDown');
+    const actualResult = await page.locator('input').inputValue();
+    console.log(`Expected result: ${expectedResult}\nActual result: ${actualResult}`);
+    expect(parseInt(actualResult)).toEqual(expectedResult);
+})

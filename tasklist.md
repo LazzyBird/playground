@@ -27,7 +27,7 @@ Infinite Scroll +
 Inputs +
 JQuery UI Menus +
 JavaScript Alerts +
-JavaScript onload event error
+JavaScript onload event error +
 Key Presses
 Large & Deep DOM
 Multiple Windows
