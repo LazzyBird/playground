@@ -42,3 +42,16 @@ test(`Click Upload button should be blocked`, async ({ page }) => {
     await expect(page.getByRole('button', { name: 'Upload' })).toBeDisabled();
 })
 //* на мультизавантаження воно віддає 500, як й на просто клікнуть на аплоад кнопку
+test('1', async ({ page }) => {
+    // Start waiting for file chooser before clicking. Note no await.
+    const __dirname = `./lib/data_assets/test_files/`;
+    const fileChooserPromise = page.waitForEvent('filechooser');
+    const fileChooser = await fileChooserPromise;
+    await page.getByText('Choose File').click();
+    await fileChooser.setFiles(path.join(__dirname, 'random_data.txt'));
+
+    await page.getByRole('button', { name: 'Upload' }).click();
+    await expect(page.locator('#uploaded-files')).toContainText(`random_data.txt`);
+    await expect(page.getByRole('heading', { name: 'File Uploaded!' })).toBeVisible();
+    //C:\cccccccccccccccc\playground\lib\data_assets\test_files
+})
