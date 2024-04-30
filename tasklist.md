@@ -1,4 +1,4 @@
-A/B Testing - нічого не зрозуміло дуже цікаво
+A/B Testing - нічого не зрозуміло дуже цікаво, там нічо не змінюється
 Add/Remove Elements +
 Basic Auth (user and pass: admin) + окрім авторизації через prompt - й чорт його поки знає, як зробити
 Broken Images + report+
@@ -28,7 +28,7 @@ Inputs +
 JQuery UI Menus +
 JavaScript Alerts +
 JavaScript onload event error +
-Key Presses
+Key Presses +
 Large & Deep DOM
 Multiple Windows
 Nested Frames
