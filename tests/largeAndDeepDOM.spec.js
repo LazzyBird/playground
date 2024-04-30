@@ -7,7 +7,7 @@ test.beforeEach(async ({ page }) => {
     await page.goto(Env.URL + 'large');
 });
 // тут все гамузом, весь тектсовий контент діва порівнюється зі згенерованим масивом
-test('siblings test', async ({ page }) => {
+test('siblings', async ({ page }) => {
     const ref = siblRef();
     const siblings = await page.locator('#siblings').allInnerTexts();
     const cleanedData = siblings.join('\n').split('\n').filter(item => item !== '');
@@ -24,7 +24,9 @@ function siblRef() {
     }
     return siblingsReference;
 };
-
+test('table', async ({ page }) => {
+    
+})
 
 { //* вкладені елементи з 1 по 50, в кожного 1-3 підпункти
     //* таблиця стовпці та рядки з 1 по 50, рядки заповнюються номерРядка.номерСтовпчика окрім <th> 
