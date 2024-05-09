@@ -29,9 +29,9 @@ JQuery UI Menus +
 JavaScript Alerts +
 JavaScript onload event error +
 Key Presses +
-Large & Deep DOM
-Multiple Windows
-Nested Frames
+Large & Deep DOM +
+Multiple Windows +
+Nested Frames + було у frames
 Notification Messages
 Redirect Link
 Secure File Download
@@ -40,5 +40,5 @@ Shifting Content + (except list)
 Slow Resources
 Sortable Data Tables
 Status Codes +
-Typos + reports
+Typos + 
 WYSIWYG Editor

@@ -1,6 +1,5 @@
 import { test, expect } from '@playwright/test';
 import Env from '@helpers/env';
-import exp from 'constants';
 
 const nestedFramesURL = Env.URL + "nested_frames";
 const iframeURL = Env.URL + "iframe";
