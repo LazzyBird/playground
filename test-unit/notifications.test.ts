@@ -1,9 +1,8 @@
-import { notifications } from "/cccccccccccccccc/playground/lib/data_assets/notification";
-const { checkNotificationText } = require('/cccccccccccccccc/playground/lib/helpers/notification'); // Assuming the function is in 'your-file-path'
+import { checkNotificationText } from '@helpers/no'; // Assuming the function is in 'your-file-path'
 
 describe('checkNotificationText', () => {
     it('should return true when notificationText is found in sampleText', () => {
-        
+
         const notificationText = "Action successful";
 
         const result = checkNotificationText(notificationText, sampleText);

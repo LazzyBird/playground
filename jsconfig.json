@@ -25,7 +25,8 @@
   },
   "include": [
     "tests/**/*",
-    "lib/fixtures/myTest.js"
+    "lib/**/*",
+    "test-unit/**/*"
   ],
   "exclude": [
     "node_modules",
