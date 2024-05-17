@@ -3,6 +3,7 @@ import Env from "@helpers/env";
 import { notifications } from "@data_assets/notification";
 import * as notification from "@helpers/notification";
 const taskURL = Env.URL + "notification_message_rendered";
+
 test.beforeEach(async ({ page }) => {
     await page.goto(taskURL);
     await page.getByRole('link', { name: 'Click here' }).click();
