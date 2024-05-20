@@ -32,13 +32,16 @@ Key Presses +
 Large & Deep DOM +
 Multiple Windows +
 Nested Frames + було у frames
-Notification Messages
-Redirect Link
-Secure File Download
-Shadow DOM
-Shifting Content + (except list)
+Notification Messages +
+Redirect Link +
+Secure File Download +
+Shadow DOM +
+Shifting Content +
 Slow Resources
 Sortable Data Tables
 Status Codes +
 Typos + 
 WYSIWYG Editor
+
+Зробити: сконфігуруй по-людськи 
+https://www.npmjs.com/package/eslint-plugin-playwright -

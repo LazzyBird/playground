@@ -1,29 +1,12 @@
 import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
 import Chance from "chance";
+import { data } from "@data_assets/jaAlerts";
 const chance = new Chance;
 const loc = '#result'
 test.beforeEach(async ({ page }) => {
     await page.goto(Env.URL + "javascript_alerts");
 });
-const data = {
-    alert: {
-        buttonText: "Click for JS Alert",
-        dialogText: "I am a JS Alert",
-        confirmText: "You successfully clicked an alert"
-    },
-    confirm: {
-        buttonText: "Click for JS Confirm",
-        dialogText: "I am a JS Confirm",
-        confirmText: { ok: "You clicked: Ok", cancel: "You clicked: Cancel" }
-    },
-    prompt: {
-        buttonText: "Click for JS Prompt",
-        dialogText: "I am a JS prompt",
-        confirmText: "You entered:"
-    }
-};
-
 //? чи навмисно промпт діалог текст містить одрук?
 test("Clicking for Alert calls alert dialog", async ({ page }) => {
     const a = data.alert;

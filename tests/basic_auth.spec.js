@@ -1,4 +1,4 @@
-import { test, expect, request } from "@playwright/test";
+import { test, expect } from "@playwright/test";
 import Env from "@helpers/env";
 import { messages } from "@data_assets/basic_auth";
 const taskURL = Env.URL + "basic_auth";
