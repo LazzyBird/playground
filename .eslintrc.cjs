@@ -1,6 +1,6 @@
 /* eslint-env node */
 module.exports = {
-  extends: ["eslint:recommended", "plugin:playwright/all", "prettier"],
+  extends: ["eslint:recommended", "plugin:playwright/all"],
   parserOptions: {
     ecmaVersion: 2023,
   },
