@@ -269,3 +269,5 @@ let longitude = initialData.longitude;
     console.log(Object.keys) // -> function keys() {[native code]}
   }
 }
+//+ JSE 2.2.3 Direct declaration inside the class body
+
