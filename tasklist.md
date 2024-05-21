@@ -37,7 +37,7 @@ Redirect Link +
 Secure File Download +
 Shadow DOM +
 Shifting Content +
-Slow Resources
+Slow Resources +
 Sortable Data Tables
 Status Codes +
 Typos + 
