@@ -489,8 +489,101 @@ let longitude = initialData.longitude;
   };
   let almostEmptyObject = new AlmostEmptyClass(120); // 120
   almostEmptyObject.sayHi(); // -> Hi!
-  almostEmptyObject.sayHello(); // error
-  //! Uncaught TypeError: almostEmptyObject.sayHello is not a function
+  almostEmptyObject.sayHello(); // error: Uncaught TypeError: almostEmptyObject.sayHello is not a function
   AlmostEmptyClass.sayHello(); // -> Hello! #брехня нічо не показує
 
 }
+// тут спочатку стверджується що я вважаю це недоцільним а потім мені доводять що ця фіча доцільна, я не можу, з дрижаками чекаю на тест по цьому розділу
+{ //в оригіналі коду купа зайвих ";" у декларації класу
+  class Vehicle {
+    constructor({ id, latitude, longitude }) {
+      this.id = id;
+      this.status = "unavailable";
+      this.setPosition({ latitude, longitude });
+    }
+    setPosition({ latitude, longitude }) {
+      this.time = Date.now();
+      this.longitude = longitude;
+      this.latitude = latitude;
+    }
+    getPosition() {
+      return {
+        latitude: this.latitude,
+        longitude: this.longitude
+      };
+    }
+    static isSameId(v1, v2) {
+      return v1.id === v2.id;
+    }
+  }
+  // тут в оригіналі помилка в коді - тричі задекларовано vehicle1 хоча там має бути vehicle1,2,3
+  let vehicle1 = new Vehicle({ longitude: 18.213423, latitude: 59.367628, id: "AL1024" });
+  let vehicle2 = new Vehicle({ longitude: 0, latitude: 0, id: "AL1024" });
+  let vehicle3 = new Vehicle({ longitude: 18.213423, latitude: 59.367628, id: "AL1026" });
+  // додано console.log() та змінено параметри другого виклику з vehicle1, vehicle2 на 1,3 бо повертає true true якщо нічо не виправити
+  console.log(Vehicle.isSameId(vehicle1, vehicle2)); // -> true
+  console.log(Vehicle.isSameId(vehicle1, vehicle3)); // -> false
+}
+{
+  //* Статичний метод або властивість можуть бути визначені не тільки в тілі класу з використанням ключового слова static. Це також можна зробити й після декларації класу через те що у JS буквально все окрім примітивів є об'єктами - тобто клас це теж об'єкт
+  //десь тут повинна бути декларація класу Vehicle але без методу .isSameId
+  Vehicle.isSameId = function (v1, v2) {
+    return v1.id === v2.id;
+  };
+  //чесно кажучи це виглядає як додавання властивості до об'єкту потім після його створення
+}
+//+ JSE2 2.6 Classes VS constructors
+{  //* class
+  class TestClass {
+    constructor(arg) {
+      this.arg = arg;
+      console.log(this.arg);
+    };
+
+    showSth() {
+      console.log("I'm prototyped!");
+    };
+
+    static showSth() {
+      console.log(`Hi, I'm static!`);
+    };
+  };
+  let test = new TestClass("Hello");
+  test.showSth(); // -> I'm prototyped!
+  TestClass.showSth(); // -> I'm static!
+  console.log(test instanceof TestClass);
+}
+{//* constructor
+
+  let Test = function (arg) {
+    this.arg = arg;
+    console.log(this.arg);
+  };
+
+  Test.prototype.showSth = function () {
+    console.log("I'm prototyped!");
+  };
+
+  Test.showSth = function () {
+    console.log(`Hi, I'm static!`);
+  };
+  let test = new Test("Hello");
+  test.showSth(); // -> I'm prototyped!
+  Test.showSth(); // -> I'm static!
+  console.log(test instanceof Test);
+}
+{//* типу по іншому написаний конструктор - не щоб порівнювати з класом, а як типу треба
+  let Test = function (arg) {
+    this.arg = arg;
+    this.showSth = function () {
+      console.log("I'm prototyped!");
+    };
+    console.log(this.arg);
+  };
+
+  Test.showSth = function () {
+    console.log(`Hi, I'm static!`);
+  };
+}
+//+ JSE2 2.7.1 Summary and labs
+//* дякую за запевнення що класи у джаваскрипті дуже спрощені порівняно з С++ або джавой ще раз щиро дякую (картинка з Шреком)
