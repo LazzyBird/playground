@@ -270,4 +270,227 @@ let longitude = initialData.longitude;
   }
 }
 //+ JSE 2.2.3 Direct declaration inside the class body
+{ //! Цей приклад з курсу містить багато помилок - це каже пісочниця курсу, й повинен сприйматися як порожне місце бо так для голови безпечніше. Але у тесті на цю пургу будуть питання
+  //! при запуску у браузері видає помилку - цей код мертвий
+  // Uncaught SyntaxError: Private field '#longitude' must be declared in an enclosing class
+  class Vehicle {
+    status = "unavailable"; // class properties must be methods expected ( but instead has =
+    #longitude;
+    #latitude;
+    constructor({ id, latitude, longitude }) {
+      this.id = id;
+      this.setPosition({ latitude, longitude });
+    }; // innecessary semicolon
+    setPosition({ latitude, longitude }) {
+      this.time = Date.now();
+      this.#longitude = longitude; // Expected an identifier and instead saw '#'. Missing ';' before statement
+      this.#latitude = latitude; // same error
+    };
+    getPosition() {
+      return {
+        latitude: this.#latitude, // Expected an identifier and instead saw "#". Expected '}' to match '{' from upper line and instead saw 'latitude' 
+        longitude: this.#longitude
+      };
+    };
+  };
+  let vehicle = new Vehicle({ longitude: 18.213423, latitude: 59.367628, id: "AL1024" }); // a bunch of syntax errors
+  console.log(vehicle.getPosition());
+  console.log(vehicle.#longitude); // error
+  //Property '#longitude' is not accessible outside class 'Vehicle' because it has a private identifier. - intended error
+  //done потім подивлюся на це щось вони перемутили
+}
+//+ JSE2 2.3.1 Getters and setters
+{
+  class Vehicle {
+    constructor({ id, latitude, longitude }) {
+      this.id = id;
+      this.position = { latitude, longitude };
+      this.status = "unavailable";
+    }
+    set position({ latitude, longitude }) {
+      this.time = Date.now(); // походу цей час також ніде не зберігається
+      this.longitude = longitude;
+      this.latitude = latitude;
+    }
+    get position() {
+      return {
+        latitude: this.latitude,
+        longitude: this.longitude
+      };
+    }
+  }
+  let vehicle = new Vehicle({ longitude: 18.213423, latitude: 59.367628, id: "AL1024" });
+  vehicle.position = { longitude: 18.193121, latitude: 59.378654 };
+  console.log(vehicle.position); // [object Object] - дуже інформативно неясно що вони хотіли чим сказати - You should locate four major differences. Помічено 3 непотрібних крапки з комою та менше помилок у консолі. Нічо не зрозуміло й не дуже цікаво. Знайдіть 4 відмінності у коді з різними помилками.
+}
+//+ JSE2 2.4.4 Inheritance
+{
+  class Vehicle {
+    constructor({ id, latitude, longitude }) {
+      this.id = id;
+      this.position = { latitude, longitude };
+      this.status = "unavailable";
+    }
+    set position({ latitude, longitude }) {
+      this.time = Date.now(); // походу цей час також ніде не зберігається
+      this.longitude = longitude;
+      this.latitude = latitude;
+    }
+    get position() {
+      return {
+        latitude: this.latitude,
+        longitude: this.longitude
+      };
+    }
+  }
+  // в оригіналі тут помилка слово Class з великої
+  class Bus extends Vehicle {
+    constructor({ seats }) {
+      super(seats); //* цей рядок додано щоб виправити помилкy ReferenceError
+      this.seats = seats;
+    }
+  }
+  // в оригіналі помилка let bus = PassengerVehicle({seats: 40}) - авжеж такого класу не було задекларовано походу це мухомори для креативного кодінгу - Uncaught ReferenceError: PassengerVehicle is not defined
+  let bus = new Bus({ seats: 40 });
+  console.log(bus.seats); // -> 40
+  console.log(bus.id); // -> ! undefined
+  //! чим глибше в курс тим міцніше кактуси. У цьому розділі типу написано Let's correct this й приводиться точна копія коду з підписом "It looks a little better". В мене погані новини. Воно виглядає так само.
+  //! Спробувала запустити це лайно й авжеж отримала
+  //Uncaught ReferenceError: Must call super constructor in derived class before accessing 'this' or returning from derived constructor
+  //* після додавання super(seats) в контруктор автобуса вище помилка виправлена
+  //? це типу щоб я краще запам'ятала але схоже що після таких пояснень я знаю менше ніж до початку
+}
+// ор вище неба - о ні там помилка нічо не працює давайте додамо keyword super й далі йде оце
+{
+  class Vehicle {
+    constructor({ id, latitude, longitude }) {
+      this.id = id;
+      this.position = { latitude, longitude };
+      this.status = "unavailable";
+    }
+    set position({ latitude, longitude }) {
+      this.time = Date.now(); // походу цей час також ніде не зберігається
+      this.longitude = longitude;
+      this.latitude = latitude;
+    }
+    get position() {
+      return {
+        latitude: this.latitude,
+        longitude: this.longitude
+      };
+    }
+  }
+  class Bus extends Vehicle {
+    constructor({ seats, id, latitude, longitude }) {
+      super({ id, latitude, longitude });
+      this.seats = seats;
+    }
+  }
+  //вангую referrenceError Car is not defined
+  //так й відбулося
+  let bus = new Car({ seats: 4, longitude: 18.213423, latitude: 59.367628, id: "AL1024" });
+  console.log(bus.seats); // -> 4 #брехня
+  console.log(bus.id); // -> "AL1024" #брехня
+}
+// наступна спроба пофіксити ці приклади власноруч
+{
+  class Vehicle {
+    constructor({ id, latitude, longitude }) {
+      this.id = id;
+      this.position = { latitude, longitude };
+      this.status = "unavailable";
+    }
+    set position({ latitude, longitude }) {
+      this.time = Date.now(); // походу цей час також ніде не зберігається
+      this.longitude = longitude;
+      this.latitude = latitude;
+    }
+    get position() {
+      return {
+        latitude: this.latitude,
+        longitude: this.longitude
+      };
+    }
+  }
+  class Bus extends Vehicle {
+    constructor({ seats, id, latitude, longitude }) {
+      super({ id, latitude, longitude });
+      this.seats = seats;
+    }
+  }
+  let bus = new Bus({ seats: 4, longitude: 18.213423, latitude: 59.367628, id: "AL1024" });
+  console.log(bus.seats); // -> 4
+  console.log(bus.id); // -> "AL1024"
+}
+//+ JSE2 2.4.2 Shadowing
+{
+  class AlmostEmptyClass {
+    constructor(sth) {
+      console.log(sth);
+    };
+    sayHi() {
+      console.log("Hi!")
+    };
+  };
+  class ExtendedClass extends AlmostEmptyClass {
+    constructor(name) {
+      super("I’m super ...");
+      this.name = name;
+    };
+    sayHi() {
+      console.log(`Hi ${this.name}!`);
+    };
+    newHi() {
+      this.sayHi();
+    }
+    oldHi() {
+      super.sayHi();
+    };
+  };
+  let obj = new ExtendedClass("Bob"); // -> I’m super ...
+  obj.sayHi();    // -> Hi Bob!
+  obj.newHi();    // -> Hi Bob!
+  obj.oldHi();    // Hi!
+  // на диво тут все ок
+}
+//+ JSE2 2.4.3 Inheritance from a constructor function
+{ //цю функцію пропонується переробити у декларацію класу але най буде так
+  let AlmostEmpty = function (sth) {
+    console.log(sth);
+    this.sayHi = function () {
+      console.log("Hi!")
+    };
+  };
+  //In this case, we treat the name of the constructor function as the name of the base class.
+  class ExtendedClass extends AlmostEmpty {
+    constructor(name) {
+      super("I’m super ...");
+      this.name = name;
+    };
+    sayHi() {
+      console.log(`Hi ${this.name}!`);
+    };
+  };
+  let obj = new ExtendedClass("Bob");
+  obj.sayHi();    // -> Hi Bob!
+}
+//+ JSE2 2.5 Static members
+{
+  class AlmostEmptyClass {
+    constructor(sth) {
+      console.log(sth);
+    };
+    sayHi() {
+      console.log("Hi!")
+    };
+    static sayHello() {
+      console.log("Hello!")
+    };
+  };
+  let almostEmptyObject = new AlmostEmptyClass(120); // 120
+  almostEmptyObject.sayHi(); // -> Hi!
+  almostEmptyObject.sayHello(); // error
+  //! Uncaught TypeError: almostEmptyObject.sayHello is not a function
+  AlmostEmptyClass.sayHello(); // -> Hello! #брехня нічо не показує
 
+}
