@@ -4,15 +4,27 @@ class User {
         this.surname = surname;
         this.email = email;
         this.role = role;
+        this.messages = [];
+        this.courses = [];
     }
     addCourse(course, level) {
-        //todo
+        const existingCourse = this.courses.find(c => c.course === course);
+        if (!existingCourse) {
+            this.courses.push({ course, level });
+        } else {
+            if (level > existingCourse.level) {
+                existingCourse.level = level;
+            }
+        }
     }
     removeCourse(course) {
-        //todo
+        this.courses = this.courses.filter(c => c.course !== course);
     }
     editCourse(course, level) {
-        //todo
+        const existingCourse = this.courses.find(c => c.course === course);
+        if (existingCourse) {
+            existingCourse.level = level;
+        }
     }
     sendMessage(from, message) {
         //? тут викликається sendEmail(from,to,message)
@@ -20,14 +32,15 @@ class User {
         //+ є дуже велике бажання скормити цей мотлох якомусь llm щоб перевірило на логіку бо по моєму вона тут не дуже жива
     }
     showMessagesHistory() {
-        //todo повинна показати в консоль історію повідомлень які були надіслані юзеру
-        //? чи створювати так само як для курсів властивість повідомлення - типу повідомлення(отримане/надіслане, кому/від кого, id, date of creation)
+        for (let message of this.messages) {
+            console.log(`${message.from} wrote to ${message.to}: ${message.content}`)
+        }
     }
-    sendEmail(from, to, message) {
-        //? чи тут її декларувати я хз
-        //? чи треба створювати у об'єкті user при виклику цього метода властивість messages яка буде зберігати повідомлення - об'єкти з наступними властивостями sendEmail({from, to, message}){ this.time = Date.now(); this.from = from; this.to = to} так щоб time було ідентифікатором, from - власними name and surname юзера, to - ім'ям отримувача
-    }
+
 }
+function sendEmail(from, to, message) {
+    // порожня болванка як по вимогах
+};
 //? чи треба тут додавати верифікації параметрів при введенні????? у завданні нічого взагалі про це не йдеться
 //! Судячи з коду для тесту рішення це все повинно бути дуже тупо
 {//* прикиньмо як повинен виглядати об'єкт юзерь після застосування відповідних методів
