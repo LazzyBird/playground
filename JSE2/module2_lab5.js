@@ -84,19 +84,78 @@ class Student extends ExtendedUser {
         super({ name, surname, email, role: 'student' });
     }
 }
-// challenge code
-let student1 = new Student({ name: 'Rafael', surname: 'Fife', email: 'rfife@rhyta.com' });
-let student2 = new Student({ name: 'Kelly', surname: 'Estes', email: 'k_estes@dayrep.com' });
-let teacher1 = new Teacher({ name: 'Paula', surname: 'Thompkins', email: 'PaulaThompkins@jourrapide.com' });
+class Tutoring {
+    constructor() {
+        this.students = [];
+        this.teachers = [];
+    }
+    getStudentByName(name, surname) {
+        let retVal;
+        for (let student of this.students) {
+            if (student.name === name && student.surname === surname) {
+                retVal = student;
+            }
+        }
+        return retVal;
+    }
+    getTeacherByName(name, surname) {
+        let retVal;
+        for (let teacher of this.teachers) {
+            if (teacher.name === name && teacher.surname === surname) {
+                retVal = teacher;
+            }
+        }
+        return retVal;
+    }
+    getStudentsForTeacher(teacher) {
+        let result = [];
+        for (let student of this.students) {
+            if (ExtendedUser.match(teacher, student).length) {
+                result.push(student);
+            }
+        }
+        return result;
+    }
+    getTeacherForStudent(student) {
+        let result = [];
+        for (let teacher of this.teachers) {
+            if (ExtendedUser.match(teacher, student).length) {
+                result.push(teacher);
+            }
+        }
+        return result;
+    }
+    addStudent(name, surname, email) {
+        this.students.push(new Student({ name, surname, email }));
+    }
+    addTeacher(name, surname, email) {
+        this.teachers.push(new Teacher({ name, surname, email }));
+    }
+}
+class ExtendedTutoring extends Tutoring {
+    constructor() {
+        super()
+    }
+    sendMessages(from, to, message) {
+        if (from && to.length) {
+            for (let target of to) {
+                target.sendMessage(from, message);
+            }
+        }
+    }
 
-student1.addCourse('maths', 2);
-student1.addCourse('physics', 4);
-teacher1.addCourse('maths', 4);
-let match = ExtendedUser.match(teacher1, student1);
-console.log(JSON.stringify(match)); // -> [{course: 'maths', level: 2}]
-teacher1.editCourse('maths', 1);
-match = ExtendedUser.match(teacher1, student1);
-console.log(JSON.stringify(match)); // -> []
-teacher1.addCourse('physics', 4);
-match = ExtendedUser.match(teacher1, student1, 'physics');
-console.log(JSON.stringify(match)); // -> {course: 'physics', level: 4}
+}
+//! challenge code
+let tutoring = new ExtendedTutoring();
+tutoring.addStudent('Rafael', 'Fife', 'rfife@rhyta.com');
+tutoring.addStudent('Kelly', 'Estes', 'k_estes@dayrep.com');
+tutoring.addTeacher('Paula', 'Thompkins', 'PaulaThompkins@jourrapide.com');
+let to = [];
+to.push(tutoring.getStudentByName('Rafael', 'Fife'));
+to.push(tutoring.getStudentByName('Kelly', 'Estes'));
+tutoring.sendMessages(tutoring.getTeacherByName('Paula', 'Thompkins'), to, 'test message');
+for (let user of to) {
+    user.showMessagesHistory();
+}
+// -> PaulaThompkins@jourrapide.com -> rfife@rhyta.com: test message
+// -> PaulaThompkins@jourrapide.com -> k_estes@dayrep.com: test message

@@ -84,19 +84,71 @@ class Student extends ExtendedUser {
         super({ name, surname, email, role: 'student' });
     }
 }
+class Tutoring {
+    constructor() {
+        this.students = [];
+        this.teachers = [];
+    }
+    getStudentByName(name, surname) {
+        let retVal;
+        for (let student of this.students) {
+            if (student.name === name && student.surname === surname) {
+                retVal = student;
+            }
+        }
+        return retVal;
+    }
+    getTeacherByName(name, surname) {
+        let retVal;
+        for (let teacher of this.teachers) {
+            if (teacher.name === name && teacher.surname === surname) {
+                retVal = teacher;
+            }
+        }
+        return retVal;
+    }
+    getStudentsForTeacher(teacher) {
+        let result = [];
+        for (let student of this.students) {
+            if (ExtendedUser.match(teacher, student).length) {
+                result.push(student);
+            }
+        }
+        return result;
+    }
+    getTeacherForStudent(student) {
+        let result = [];
+        for (let teacher of this.teachers) {
+            if (ExtendedUser.match(teacher, student).length) {
+                result.push(teacher);
+            }
+        }
+        return result;
+    }
+    addStudent(name, surname, email) {
+        this.students.push(new Student({ name, surname, email }));
+    }
+    addTeacher(name, surname, email) {
+        this.teachers.push(new Teacher({ name, surname, email }));
+    }
+}
 // challenge code
-let student1 = new Student({ name: 'Rafael', surname: 'Fife', email: 'rfife@rhyta.com' });
-let student2 = new Student({ name: 'Kelly', surname: 'Estes', email: 'k_estes@dayrep.com' });
-let teacher1 = new Teacher({ name: 'Paula', surname: 'Thompkins', email: 'PaulaThompkins@jourrapide.com' });
+let tutoring = new Tutoring();
+tutoring.addStudent('Rafael', 'Fife', 'rfife@rhyta.com');
+tutoring.addStudent('Kelly', 'Estes', 'k_estes@dayrep.com');
+tutoring.addTeacher('Paula', 'Thompkins', 'PaulaThompkins@jourrapide.com');
+let student = tutoring.getStudentByName('Rafael', 'Fife');
+student.addCourse('maths', 2);
+student.addCourse('physics', 4);
+let teacher = tutoring.getTeacherByName('Paula', 'Thompkins');
+teacher.addCourse('maths', 4);
+let students = tutoring.getTeacherForStudent(student);
+let teachers = tutoring.getStudentsForTeacher(teacher);
+console.log(JSON.stringify(students[0])); // -> Teacher {name: 'Paula', surname: 'Thompkins', ...
+console.log(JSON.stringify(teachers[0])); // -> Student {name: 'Rafael', surname: 'Fife', ...
 
-student1.addCourse('maths', 2);
-student1.addCourse('physics', 4);
-teacher1.addCourse('maths', 4);
-let match = ExtendedUser.match(teacher1, student1);
-console.log(JSON.stringify(match)); // -> [{course: 'maths', level: 2}]
-teacher1.editCourse('maths', 1);
-match = ExtendedUser.match(teacher1, student1);
-console.log(JSON.stringify(match)); // -> []
-teacher1.addCourse('physics', 4);
-match = ExtendedUser.match(teacher1, student1, 'physics');
-console.log(JSON.stringify(match)); // -> {course: 'physics', level: 4}
+student = tutoring.getStudentByName('Kelly', 'Estes');
+students = tutoring.getTeacherForStudent(student);
+teachers = tutoring.getStudentsForTeacher(teacher);
+console.log(JSON.stringify(students[0])); // -> undefined
+console.log(JSON.stringify(teachers[0])); // -> Student {name: 'Rafael', surname: 'Fife', ... 
