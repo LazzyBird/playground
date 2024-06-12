@@ -260,10 +260,69 @@
         return accumulator;
     }, {});
     console.log(strangeObj); // -> {10: 0, 20: 1, 30: 2, 50: 3, 80: 4, 90: 5, 100: 6}
-
 }
-
-//+ Глибока деструктуризація (явна)
+//+ 3.2.14 Reversing the order of the elements
+{ //модифікує вихідний масив
+    let numbers = [10, 20, 30, 50, 80, 90, 100]; // -> [10, 20, 30, 50, 80, 90, 100]
+    console.log(numbers[0]); // -> 10
+    numbers.reverse(); // -> [100, 90, 80, 50, 30, 20, 10]
+    console.log(numbers[0]); // -> 100
+    numbers.reverse(); // -> [10, 20, 30, 50, 80, 90, 100]
+    console.log(numbers[0]); // -> 10
+}
+//+ 3.2.15 Looking for an element
+{
+    let myPets = ["cat", "dog", "hamster", "canary", "shark", "cat", "dog"];
+    console.log(myPets.includes("shark")); // -> true 
+    console.log(myPets.includes("unicorn")); // -> false
+    console.log(myPets.indexOf("dog")); // -> 1
+    console.log(myPets.lastIndexOf("dog")); // -> 6
+    console.log(myPets.indexOf("unicorn")); // -> -1
+}
+{
+    let myPets = ["cat", "dog", "hamster", "canary", "shark", "cat", "dog"];
+    console.log(myPets.find(item => item.length > 3)); // -> hamster
+    console.log(myPets.find(item => item.includes("og"))); // -> dog
+    console.log(myPets.find(item => item.includes("fish"))); // -> undefined
+    console.log(myPets.findIndex(item => item.length > 3)); // -> 2
+    console.log(myPets.findIndex(item => item.includes("og"))); // -> 1
+    console.log(myPets.findIndex(item => item.includes("fish"))); // -> -1
+}
+//+3.2.16 Copying a selected part of the array
+{
+    let myPets = ["cat", "dog", "hamster", "canary", "shark", "cat", "dog"];
+    let p1 = myPets.slice(3); // ->  ["canary", "shark", "cat", "dog"]
+    let p2 = myPets.slice(3, 5); // -> ["canary", "shark"]
+    let p3 = myPets.slice(-3); // -> ["shark", "cat", "dog"]
+    let p4 = myPets.slice(-3, -1); // -> ["shark", "cat"]
+}
+//+ 3.2.17 Deleting and replacing a selected part of the array
+{
+    let myPets = ["cat", "dog", "hamster", "canary", "shark", "cat", "dog"];
+    let removedPets = myPets.splice(2, 3);
+    console.log(myPets); // -> ["cat", "dog", "cat", "dog"]
+    console.log(removedPets); // -> ["hamster", "canary", "shark"]
+}
+{ //тут splice з 2 індекса видаляє 0 та вставляє те що йде після перших двух параметрів
+    let myPets = ["cat", "dog", "hamster", "canary", "shark", "cat", "dog"];
+    myPets.splice(2, 0, "rabbit", "guinea pig");
+    console.log(myPets); // -> ["cat", "dog", "rabbit", "guinea pig", "hamster", "canary", "shark", "cat", "dog"]
+}
+//+ 3.2.18 The destructuring assignment
+{
+    let myPets = ["cat", "dog", "hamster", "canary"]; // 4 elements
+    // If we don't want to copy any of the array items, we can mark it by leaving a blank field separated by commas:
+    let [pet1, , pet3, pet4] = myPets;
+    console.log(pet1); // -> cat
+    console.log(pet3); // -> hamster
+}
+{ // можно задати дефолтні значення для елементів якщо їх не буде знайдено в масиві, але якщо є то ці дефолтні будуть проігноровані
+    let myPets = ["cat", "dog"];
+    let [pet1 = "fish", , pet3 = "fish"] = myPets;
+    console.log(pet1); // -> cat
+    console.log(pet3); // -> fish
+}
+//+ Глибока деструктуризація (явна) об'єкту
 {
     const person = {
         name: "John",
@@ -276,7 +335,7 @@
     };
 
     const { name, age, address: { city, zip }, hobbies: [firstHobby, secondHobby] } = person;
-    // кожна властивість стає змінною з відповідним ім'ям
+    // кожна властивість стає змінною з відповідним ім'ям та значенням
     console.log(name);        // "John"
     console.log(age);         // 30
     console.log(city);        // "New York"
@@ -284,3 +343,71 @@
     console.log(firstHobby);  // "reading"
     console.log(secondHobby); // "travelling"
 }
+//+ 3.2.19 The spread operator in arrays
+{
+    let array1 = [100, 200, 300];
+    let array2 = [1000, 2000];
+    let array3 = [10, 20, ...array1, 500, ...array2]; //-> [10, 20, 100, 200, 300, 500, 1000, 2000]
+}
+{ //функція бере робить суму 4х аргументів, тому якщо масив буде довше то в суму потраплять тільки перші 4 елементи
+    let testFn = (a, b, c, d) => a + b + c + d;
+    let array = [10, 20, 30, 40];
+    console.log(testFn(...array)); // -> 100 - красиво обгорнули чорти
+}
+//+ 3.2.20 Set
+{ // цей конструктор бере масив як аргумент та залишає лише унікальні елементи - й створює object Set
+    let emptySet = new Set(); // -> {}
+    console.log(emptySet.size); // -> 0
+    let petsSet = new Set(["cat", "dog", "cat"]); // -> {"cat", "dog"}
+    console.log(petsSet.size); // -> 2
+}
+//+ 3.2.22 Checking the presence of the element
+{ //ясно що об'єкт петсет унаслідує методи контруктору Set
+    let petsSet = new Set(["cat", "dog"]); // -> {"cat", "dog"}
+    console.log(petsSet.has("cat")); // -> true
+    console.log(petsSet.has("shark")); // -> false
+}
+//+ 3.2.23 Handling elements
+{
+    let petsSet = new Set(["cat", "dog"]); // -> {"cat", "dog"}
+    console.log(petsSet.size); // -> 2
+    petsSet.add("shark");
+    petsSet.add("hamster");
+    console.log(petsSet.size); // -> 4
+    console.log(petsSet.has("shark")); // -> true
+    petsSet.delete("dog"); // -> true
+    petsSet.delete("dog"); // -> false
+    console.log(petsSet.size); // -> 3
+    petsSet.clear();
+    console.log(petsSet.size); // -> 0
+}
+//+ 3.2.24 Walking through the set elements
+{ //*forEach
+    let petsSet = new Set(["cat", "dog", "hamster"]); // -> {"cat", "dog", "hamster"}
+    petsSet.forEach(value => console.log(value)); // -> cat -> dog -> hamster
+    petsSet.forEach((value, key) => console.log(`(${value}:${key})`)); // -> (cat:cat) -> (dog:dog) -> (hamster:hamster)
+}
+{ //* next()
+    let petsSet = new Set(["cat", "dog", "hamster"]); // -> {"cat", "dog", "hamster"}
+    let petsIterator = petsSet.values();
+    console.log(petsIterator.next().value); // -> cat
+    console.log(petsIterator.next().value); // -> dog
+    console.log(petsIterator.next().value); // -> hamster
+    // або через while
+    let result = petsIterator.next();
+    while (!result.done) {
+        console.log(result.value);
+        result = petsIterator.next();
+    }
+}
+//+ 3.2.25 The spread operator in sets
+{
+    let petsSet = new Set(["cat", "dog", "hamster"]); // -> {"cat", "dog", "hamster"}
+    console.log(petsSet instanceof Set); // -> true
+    let petsArray = [...petsSet]; // -> ["cat", "dog", "hamster"]
+    console.log(petsArray instanceof Array); // -> true
+}
+//TODO розібратися з цим котструктором
+//* https://www.geeksforgeeks.org/sets-in-javascript/ 
+
+//+ 3.2.26 Map
