@@ -202,10 +202,85 @@
     });
     console.log(anyNumberPresent) // -> true
     // якщо зминіти на every поверне false
-    // умовний оператор там нафін не упав тому
-    {
-        anyNumberPresent = array1.some((item) => {
-            return (typeof item === "number");
-        }); // -> true
-    }
+    // умовний оператор там нафіг не упав тому
+    anyNumberPresent = array1.some((item) => {
+        return (typeof item === "number");
+    }); // -> true
+    // оператор > повертає булеву тому так само можемо скоротити:
+    let array2 = [90, 80, 10, 20, 30, 100, 50];
+    let allPositive = array2.every(item => item > 0); // -> true
+    console.log(allPositive);
+}
+//+ 3.2.10 Filtering
+{ // я щось робила з фільтром й воно не працювало як треба й було замінено на цикл, згадати б ще що
+    let array1 = ["cat", 90, 80, 10, 20, 30, 100, 50, "dog"];
+    console.log(array1.length); // -> 9
+    let numbers = array1.filter(item => typeof item === "number"); // -> [90, 80, 10, 20, 30, 100, 50]
+    console.log(numbers.length); // -> 7
+    console.log(array1.length); // -> 9
+}
+//+ 3.2.11 Mapping elements
+{
+    let array1 = ["cat", 90, 80, 10, 20, 30, 100, 50, "dog"];
+    let squarePower = array1.filter(item => typeof item === "number").map(item => item * item); // -> [8100, 6400, 100, 400, 900, 10000, 2500]
+}
+//+ 3.2.12 Sorting
+{ // цей метод таки незворотньо змінює вихідний масив, тому дивися нижче що робити якщо оригінал ще потрібен
+    let array1 = ["cat", 90, 80, 10, 20, 30, 100, 50, "dog"];
+    let numbers = array1.filter(item => typeof item === "number"); // -> [90, 80, 10, 20, 30, 100, 50]
+    console.log(numbers[0]);
+    numbers.sort((first, second) => {
+        if (first < second) {
+            return -1
+        } else if (first == second) {
+            return 0;
+        } else {
+            return 1;
+        }
+    }); // -> [10, 20, 30, 50, 80, 90, 100]
+    console.log(numbers[0]);
+    numbers.sort((first, second) => first - second); // ->[10, 20, 30, 50, 80, 90, 100]
+    // копія за допомогою slice() без аргументів - тобто початкова й кінцева позиції не зазначені тому від 0 до кінця
+    numbers = [12, 10, 15, 50, 81, 1, 15]
+    let sortedNumbers = numbers.slice().sort((first, second) => first - second);
+    // копія за допомогою оператора розподілу ("spread operator" "...")
+    sortedNumbers = [...numbers].sort((a, b) => a - b);
+    // одразу щоб не забути про оператор rest 
+    const [one, two, ...rest] = numbers;
+    console.log(one, two, rest) // -> 12 10 15, 50, 81, 1, 15 - так як я роблю тут деконструкт несортованому масиву то й порядок як і вихідному
+}
+//+ 3.2.13 Reducing the array
+{ // reduce method
+    let numbers = [10, 20, 30, 50, 80, 90, 100]; // -> [10, 20, 30, 50, 80, 90, 100]
+    let sum = numbers.reduce((accumulator, item) => accumulator + item);
+    console.log(sum); // -> 380
+    // воно так не працює але типу
+    let strangeObj = numbers.reduce((accumulator, item, index) => {
+        accumulator[item] = index;
+        return accumulator;
+    }, {});
+    console.log(strangeObj); // -> {10: 0, 20: 1, 30: 2, 50: 3, 80: 4, 90: 5, 100: 6}
+
+}
+
+//+ Глибока деструктуризація (явна)
+{
+    const person = {
+        name: "John",
+        age: 30,
+        address: {
+            city: "New York",
+            zip: "10001"
+        },
+        hobbies: ["reading", "travelling"]
+    };
+
+    const { name, age, address: { city, zip }, hobbies: [firstHobby, secondHobby] } = person;
+    // кожна властивість стає змінною з відповідним ім'ям
+    console.log(name);        // "John"
+    console.log(age);         // 30
+    console.log(city);        // "New York"
+    console.log(zip);         // "10001"
+    console.log(firstHobby);  // "reading"
+    console.log(secondHobby); // "travelling"
 }
